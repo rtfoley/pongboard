@@ -63,14 +63,12 @@ MatchFormSchema = new SimpleSchema({
   rs: {
     type: Number,
     label: 'Red/Yellow Score*',
-    min: 0,
-    max: 10
+    min: 0
   },
   bs: {
     type: Number,
     label: 'Blue/Black Score*',
-    min: 0,
-    max: 10
+    min: 0
   }
 });
 
