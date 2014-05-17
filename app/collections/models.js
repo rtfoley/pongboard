@@ -36,38 +36,38 @@ SimpleSchema.messages({
 MatchFormSchema = new SimpleSchema({
   ro: {
     type: String,
-    label: 'Red/Yellow Offense*',
+    label: 'Player 1A*',
     min: 2,
     custom: playerNames
   },
   rd: {
     type: String,
-    label: 'Red/Yellow Defense',
+    label: 'Player 1B',
     optional: true,
     min: 2,
     custom: playerNames
   },
   bo: {
     type: String,
-    label: 'Blue/Black Offense*',
+    label: 'Player 2A*',
     min: 2,
     custom: playerNames
   },
   bd: {
     type: String,
-    label: 'Blue/Black Defense',
+    label: 'Player 2B',
     optional: true,
     min: 2,
     custom: playerNames
   },
   rs: {
     type: Number,
-    label: 'Red/Yellow Score*',
+    label: 'Side 1 Score*',
     min: 0
   },
   bs: {
     type: Number,
-    label: 'Blue/Black Score*',
+    label: 'Side 2 Score*',
     min: 0
   }
 });

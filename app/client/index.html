@@ -138,13 +138,15 @@
       <div class="row">
         <div class="col-sm-8 col-sm-offset-2">
           <div class="row">
-            <!-- Red Team / Yellow Team -->
-            <!-- we switched to a new foosball table, which has yellow and black sides -->
+            <div class="col-sm-12" style="text-align:center">
+              <h4 align="center">Players</h4>
+            </div>
+          </div>
+          
+          <div class="row">
             <div class="col-sm-6">
               <div class="form-group{{#if afFieldIsInvalid name='ro'}} has-error{{/if}}">
-                <label style="text-align:left">
-                  <span style="color: red">Red</span> or <span style="color: yellow">Yellow</span> <br>
-                  Individual / Team <small>({{red_singles_wins}} / {{red_doubles_wins}})</small></label>
+                <label style="text-align:left">Side 1</label>
                 {{> afFieldInput name='ro' placeholder="schemaLabel" class="input_autocomplete"}}
                 {{#if afFieldIsInvalid name='ro'}}
                 <span class="help-block">{{> afFieldMessage name='ro'}}</span>
@@ -158,13 +160,9 @@
               </div>
             </div>
 
-            <!-- Blue Team / Black Team -->
-            <!-- we switched to a new foosball table, which has yellow and black sides -->
             <div class="col-sm-6">
               <div class="form-group{{#if afFieldIsInvalid name='bo'}} has-error{{/if}}">
-                <label style="text-align:left">
-                  <span style="color: blue">Blue</span> or <span style="color: black">Black</span> <br>
-                  Individual / Team <small>({{blue_singles_wins}} / {{blue_doubles_wins}})</small></label>
+                <label style="text-align:left">Side 2</label>
                 {{> afFieldInput name='bo' placeholder="schemaLabel" class="input_autocomplete"}}
                 {{#if afFieldIsInvalid name='bo'}}
                 <span class="help-block">{{> afFieldMessage name='bo'}}</span>
@@ -182,7 +180,7 @@
           <div class="row">
             <hr>
             <div class="col-sm-12" style="text-align:center">
-              <h4 align="center">Score</h4>
+              <h4 align="center">Scores</h4>
             </div>
           </div>
           <div class="row">
