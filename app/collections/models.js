@@ -6,10 +6,6 @@ Players = new Meteor.Collection('players');
 CombinedRatings = new Meteor.Collection('combined_ratings');
 // just singles ratings
 SinglesRatings = new Meteor.Collection('singles_ratings');
-// doubles offense
-OffenseRatings = new Meteor.Collection('offense_ratings');
-// doubles defense
-DefenseRatings = new Meteor.Collection('defense_ratings');
 
 var playerNames = function() {
   // if the value does not exist, then let's just return so that the optional
@@ -102,14 +98,6 @@ if (Meteor.isServer) {
     return SinglesRatings.find();
   });
 
-  Meteor.publish('offense_ratings', function() {
-    return OffenseRatings.find();
-  });
-
-  Meteor.publish('defense_ratings', function() {
-    return DefenseRatings.find();
-  });
-
   // define some constants for Elo Ratings
   // we are using the Bonzini USA values:
   //   http://www.bonziniusa.com/foosball/tournament/TournamentRankingSystem.html
@@ -170,18 +158,6 @@ if (Meteor.isServer) {
       rating: rating
     });
 
-    OffenseRatings.insert({
-      date_time: Date.now(),
-      player_id: id,
-      rating: rating
-    });
-
-    DefenseRatings.insert({
-      date_time: Date.now(),
-      player_id: id,
-      rating: rating
-    });
-
     return id;
   };
 
@@ -228,24 +204,6 @@ if (Meteor.isServer) {
                  blue_rating, red_rating,
                  ratingValues.last_bd_combined_rating.rating,
                  !ratingValues.red_won, CombinedRatings);
-
-    // update doubles ratings, distinguishing between offense and defense
-    updateRating(ratingValues.date, ratingValues.ro_id,
-                 red_rating, blue_rating,
-                 ratingValues.last_ro_offense_rating.rating,
-                 ratingValues.red_won, OffenseRatings);
-    updateRating(ratingValues.date, ratingValues.rd_id,
-                 red_rating, blue_rating,
-                 ratingValues.last_rd_defense_rating.rating,
-                 ratingValues.red_won, DefenseRatings);
-    updateRating(ratingValues.date, ratingValues.bo_id,
-                 blue_rating, red_rating,
-                 ratingValues.last_bo_offense_rating.rating,
-                 !ratingValues.red_won, OffenseRatings);
-    updateRating(ratingValues.date, ratingValues.bd_id,
-                 blue_rating, red_rating,
-                 ratingValues.last_bd_defense_rating.rating,
-                 !ratingValues.red_won, DefenseRatings);
   };
 
   var update1v1Ratings = function(ratingValues) {
@@ -302,20 +260,6 @@ if (Meteor.isServer) {
                    !ratingValues.red_won,
                    CombinedRatings);
 
-      // update doubles ratings
-      updateRating(ratingValues.date, ratingValues.ro_id,
-                   red_rating2,
-                   ratingValues.last_bo_singles_rating.rating,
-                   ratingValues.last_ro_offense_rating.rating,
-                   ratingValues.red_won,
-                   OffenseRatings);
-      updateRating(ratingValues.date, ratingValues.rd_id,
-                   red_rating2,
-                   ratingValues.last_bo_singles_rating.rating,
-                   ratingValues.last_rd_defense_rating.rating,
-                   ratingValues.red_won,
-                   DefenseRatings);
-
       // update singles ratings
       updateRating(ratingValues.date, ratingValues.bo_id,
                    ratingValues.last_bo_singles_rating.rating,
@@ -352,20 +296,6 @@ if (Meteor.isServer) {
                    ratingValues.last_ro_singles_rating.rating,
                    ratingValues.red_won,
                    SinglesRatings);
-
-      // update doubles ratings
-      updateRating(ratingValues.date, ratingValues.bo_id,
-                   blue_rating2,
-                   ratingValues.last_ro_singles_rating.rating,
-                   ratingValues.last_bo_offense_rating.rating,
-                   !ratingValues.red_won,
-                   OffenseRatings);
-      updateRating(ratingValues.date, ratingValues.bd_id,
-                   blue_rating2,
-                   ratingValues.last_ro_singles_rating.rating,
-                   ratingValues.last_bd_defense_rating.rating,
-                   !ratingValues.red_won,
-                   DefenseRatings);
     }
   };
 
@@ -374,22 +304,17 @@ if (Meteor.isServer) {
     var last_ro_combined_rating, last_rd_combined_rating,
         last_bo_combined_rating, last_bd_combined_rating;
     var last_ro_singles_rating, last_bo_singles_rating;
-    var last_ro_offense_rating, last_bo_offense_rating;
-    var last_rd_defense_rating, last_bd_defense_rating;
+    
     if (typeof doc.ro !== 'undefined') {
       ro_id = getPlayerId(doc.ro);
       last_ro_combined_rating = CombinedRatings.findOne(
           {player_id: ro_id}, {sort: {date_time: -1}});
       last_ro_singles_rating = SinglesRatings.findOne(
           {player_id: ro_id}, {sort: {date_time: -1}});
-      last_ro_offense_rating = OffenseRatings.findOne(
-          {player_id: ro_id}, {sort: {date_time: -1}});
     }
     if (typeof doc.rd !== 'undefined') {
       rd_id = getPlayerId(doc.rd);
       last_rd_combined_rating = CombinedRatings.findOne(
-          {player_id: rd_id}, {sort: {date_time: -1}});
-      last_rd_defense_rating = DefenseRatings.findOne(
           {player_id: rd_id}, {sort: {date_time: -1}});
     }
     if (typeof doc.bo !== 'undefined') {
@@ -398,14 +323,10 @@ if (Meteor.isServer) {
           {player_id: bo_id}, {sort: {date_time: -1}});
       last_bo_singles_rating = SinglesRatings.findOne(
           {player_id: bo_id}, {sort: {date_time: -1}});
-      last_bo_offense_rating = OffenseRatings.findOne(
-          {player_id: bo_id}, {sort: {date_time: -1}});
     }
     if (typeof doc.bd !== 'undefined') {
       bd_id = getPlayerId(doc.bd);
       last_bd_combined_rating = CombinedRatings.findOne(
-          {player_id: bd_id}, {sort: {date_time: -1}});
-      last_bd_defense_rating = DefenseRatings.findOne(
           {player_id: bd_id}, {sort: {date_time: -1}});
     }
 
@@ -427,10 +348,6 @@ if (Meteor.isServer) {
       last_rd_combined_rating: last_rd_combined_rating,
       last_bo_combined_rating: last_bo_combined_rating,
       last_bd_combined_rating: last_bd_combined_rating,
-      last_ro_offense_rating: last_ro_offense_rating,
-      last_rd_defense_rating: last_rd_defense_rating,
-      last_bo_offense_rating: last_bo_offense_rating,
-      last_bd_defense_rating: last_bd_defense_rating,
       last_ro_singles_rating: last_ro_singles_rating,
       last_bo_singles_rating: last_bo_singles_rating
     };
@@ -454,8 +371,6 @@ if (Meteor.isServer) {
 
       CombinedRatings.remove({});
       SinglesRatings.remove({});
-      OffenseRatings.remove({});
-      DefenseRatings.remove({});
 
       var INITIAL_RATING = 1250;
       var players = Players.find({}, {sort: {date_time: 1}});
@@ -468,18 +383,6 @@ if (Meteor.isServer) {
         });
 
         SinglesRatings.insert({
-          date_time: player.date_time,
-          player_id: player._id,
-          rating: INITIAL_RATING
-        });
-
-        OffenseRatings.insert({
-          date_time: player.date_time,
-          player_id: player._id,
-          rating: INITIAL_RATING
-        });
-
-        DefenseRatings.insert({
           date_time: player.date_time,
           player_id: player._id,
           rating: INITIAL_RATING

@@ -13,9 +13,7 @@ Router.configure({
     return [Meteor.subscribe('players'),
             Meteor.subscribe('matches'),
             Meteor.subscribe('combined_ratings'),
-            Meteor.subscribe('singles_ratings'),
-            Meteor.subscribe('offense_ratings'),
-            Meteor.subscribe('defense_ratings')];
+            Meteor.subscribe('singles_ratings')];
   }
 });
 
@@ -35,16 +33,12 @@ Router.map(function() {
         Players.find();
         CombinedRatings.find();
         SinglesRatings.find();
-        OffenseRatings.find();
-        DefenseRatings.find();
       }
     },
     waitOn: function() {
       return [Meteor.subscribe('players'),
               Meteor.subscribe('combined_ratings'),
-              Meteor.subscribe('singles_ratings'),
-              Meteor.subscribe('offense_ratings'),
-              Meteor.subscribe('defense_ratings')];
+              Meteor.subscribe('singles_ratings')];
     }
   });
 
@@ -82,9 +76,7 @@ Router.map(function() {
       return [Meteor.subscribe('matches'),
               Meteor.subscribe('players'),
               Meteor.subscribe('combined_ratings'),
-              Meteor.subscribe('singles_ratings'),
-              Meteor.subscribe('offense_ratings'),
-              Meteor.subscribe('defense_ratings')];
+              Meteor.subscribe('singles_ratings')];
     }
   });
 

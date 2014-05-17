@@ -240,8 +240,6 @@ Template.header.events({
 Template.home.rendered = function() {
   addGraph(CombinedRatings, '#combined_chart svg');
   addGraph(SinglesRatings, '#singles_chart svg');
-  addGraph(OffenseRatings, '#offense_chart svg');
-  addGraph(DefenseRatings, '#defense_chart svg');
 };
 
 
@@ -384,11 +382,7 @@ Template.individual_stats.helpers({
             combined_rating: findPlayerLatestEloRatingFromId(id,
                                                              CombinedRatings),
             singles_rating: findPlayerLatestEloRatingFromId(id,
-                                                            SinglesRatings),
-            offense_rating: findPlayerLatestEloRatingFromId(id,
-                                                            OffenseRatings),
-            defense_rating: findPlayerLatestEloRatingFromId(id,
-                                                            DefenseRatings)
+                                                            SinglesRatings)
           });
         }
       }

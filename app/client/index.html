@@ -50,16 +50,6 @@
   <div id="singles_chart">
     <svg style="min-height: 500"></svg>
   </div>
-
-  <h3>Doubles Offense Rating</h3>
-  <div id="offense_chart">
-    <svg style="min-height: 500"></svg>
-  </div>
-
-  <h3>Doubles Defense Rating</h3>
-  <div id="defense_chart">
-    <svg style="min-height: 500"></svg>
-  </div>
 </template>
 
 <template name="addplayer">
@@ -222,10 +212,10 @@
         <thead>
           <tr>
             <th data-type="numeric">Date/Time</th>
-            <th data-sort-ignore="true" data-hide="phone">Off</th>
-            <th data-sort-ignore="true" data-hide="phone">Def</th>
-            <th data-sort-ignore="true" data-hide="phone">Off</th>
-            <th data-sort-ignore="true" data-hide="phone">Def</th>
+            <th data-sort-ignore="true" data-hide="phone">1A</th>
+            <th data-sort-ignore="true" data-hide="phone">1B</th>
+            <th data-sort-ignore="true" data-hide="phone">2A</th>
+            <th data-sort-ignore="true" data-hide="phone">2B</th>
             <th data-sort-ignore="true" data-group="score-group" data-type="numeric" colspan="2">Score</th>
           </tr>
         </thead>
@@ -261,8 +251,6 @@
             <th data-type="numeric" data-hide="phone">Losses</th>
             <th data-type="numeric" data-hide="phone">Win %</th>
             <th data-type="numeric" data-hide="phone">Singles</th>
-            <th data-type="numeric" data-hide="phone">Offense</th>
-            <th data-type="numeric" data-hide="phone">Defense</th>
             <th data-type="numeric" data-sort-initial="descending">Combined</th>
           </tr>
           </thead>
@@ -274,8 +262,6 @@
             <td>{{losses}}</td>
             <td>{{percent}}</td>
             <td>{{singles_rating}}</td>
-            <td>{{offense_rating}}</td>
-            <td>{{defense_rating}}</td>
             <td>{{combined_rating}}</td>
           </tr>
           {{/each}}
@@ -305,8 +291,8 @@
           <table class="footable table table-hover table-striped" id="team_stats_table" data-page-navigation=".pagination">
             <thead>
             <tr>
-              <th>Off Player</th>
-              <th>Def Player</th>
+              <th>Player A</th>
+              <th>Player B</th>
               <th data-type="numeric" data-hide="phone">Wins</th>
               <th data-type="numeric" data-hide="phone">Losses</th>
               <th data-type="numeric" data-sort-initial="descending">Win %</th>
