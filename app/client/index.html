@@ -4,51 +4,51 @@
 </head>
 
 <template name="layout">
-  <div id="wrapper">
-    {{> yield region='sidebar'}}
-    {{> yield region='header'}}
-
-    <div id="page-content-wrapper" class="page-content inset">
-      {{> yield}}
-    </div>
+  <div id="container">
+    {{> header}}
+    <div id="main" class="container-fluid">
+			{{> yield}}
+		</div>
   </div>
 </template>
 
 <template name="header">
-  <div class="content-header">
-    <h1>
-      <a id="menu-toggle" href="#" class="btn btn-default">
-        <i class="icon-reorder"></i>
-      </a>
-      ScoreKeeper <small>Ping Pong Edition</small>
-    </h1>
-  </div>
-  <hr>
-</template>
+  <header>
+    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{{pathFor 'home'}}">ScoreKeeper</a>
+        </div>
 
-<template name="sidebar">
-  <!-- Sidebar -->
-  <div id="sidebar-wrapper">
-      <ul class="sidebar-nav">
-          <li class="sidebar-brand"><a href="{{pathFor 'home'}}">ScoreKeeper</a></li>
-          <li><a href="{{pathFor 'addplayer'}}">Add Player</a></li>
-          <li><a href="{{pathFor 'addmatch'}}">Add Match</a></li>
-          <li><a href="{{pathFor 'individual_stats'}}">Individual Stats</a></li>
-          <li><a href="{{pathFor 'team_stats'}}">Team Stats</a></li>
-          <li><a href="{{pathFor 'rules'}}">Rules</a></li>
-      </ul>
-  </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="{{pathFor 'addplayer'}}">Add Player</a></li>
+            <li><a href="{{pathFor 'addmatch'}}">Add Match</a></li>
+            <li><a href="{{pathFor 'individual_stats'}}">Individual Stats</a></li>
+            <li><a href="{{pathFor 'rules'}}">Rules</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+	</header>
 </template>
 
 <template name="home">
-  <h3>Combined Rating</h3>
-  <div id="combined_chart">
-    <svg style="min-height: 500"></svg>
-  </div>
-
-  <h3>Singles Rating</h3>
-  <div id="singles_chart">
-    <svg style="min-height: 500"></svg>
+  <div class="row">
+    <div class="col-sm-6">
+      {{> individual_stats}}
+    </div>
+    <div class="col-sm-6">
+      {{> last_10_matches}}
+    </div>
   </div>
 </template>
 
@@ -119,6 +119,7 @@
 
 <template name="addmatch">
   {{> game_form}}
+  <hr>
   {{> last_10_matches}}
 </template>
 
@@ -142,12 +143,6 @@
                 <span class="help-block">{{> afFieldMessage name='ro'}}</span>
                 {{/if}}
               </div>
-              <div class="form-group{{#if afFieldIsInvalid name='rd'}} has-error{{/if}}">
-                {{> afFieldInput name='rd' placeholder="schemaLabel" class="input_autocomplete"}}
-                {{#if afFieldIsInvalid name='rd'}}
-                <span class="help-block">{{> afFieldMessage name='rd'}}</span>
-                {{/if}}
-              </div>
             </div>
 
             <div class="col-sm-6">
@@ -156,12 +151,6 @@
                 {{> afFieldInput name='bo' placeholder="schemaLabel" class="input_autocomplete"}}
                 {{#if afFieldIsInvalid name='bo'}}
                 <span class="help-block">{{> afFieldMessage name='bo'}}</span>
-                {{/if}}
-              </div>
-              <div class="form-group{{#if afFieldIsInvalid name='bd'}} has-error{{/if}}">
-                {{> afFieldInput name='bd' placeholder="schemaLabel" class="input_autocomplete"}}
-                {{#if afFieldIsInvalid name='bd'}}
-                <span class="help-block">{{> afFieldMessage name='bd'}}</span>
                 {{/if}}
               </div>
             </div>
@@ -204,125 +193,65 @@
 </template>
 
 <template name="last_10_matches">
-  <hr>
   <div class="row">
-    <div class="col-sm-10 col-sm-offset-1">
-      <h3 align="center">Recent Matches</h3>
-      <table class="footable table table-hover table-striped" id="last_10_matches_table">
-        <thead>
-          <tr>
-            <th data-type="numeric">Date/Time</th>
-            <th data-sort-ignore="true" data-hide="phone">1A</th>
-            <th data-sort-ignore="true" data-hide="phone">1B</th>
-            <th data-sort-ignore="true" data-hide="phone">2A</th>
-            <th data-sort-ignore="true" data-hide="phone">2B</th>
-            <th data-sort-ignore="true" data-group="score-group" data-type="numeric" colspan="2">Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each matches}}
-            <tr>
-              <td data-value="{{date_time}}">{{formatDate date_time}}</td>
-              <td>{{findPlayerFromId ro_id}}</td>
-              <td>{{findPlayerFromId rd_id}}</td>
-              <td>{{findPlayerFromId bo_id}}</td>
-              <td>{{findPlayerFromId bd_id}}</td>
-              <td data-group="score-group">{{rs}}</td>
-              <td data-group="score-group">{{bs}}</td>
-            </tr>
-          {{/each}}
-        </tbody>
-      </table>
-    </div>
+    <h2 align="center">Recent Matches</h2>
+    <table class="footable table table-hover table-striped" id="last_10_matches_table">
+      <thead>
+        <tr>
+          <th data-type="numeric">Date/Time</th>
+          <th data-sort-ignore="true" data-hide="phone">Player 1</th>
+          <th data-sort-ignore="true" data-hide="phone">Player 2</th>
+          <th data-sort-ignore="true" data-group="score-group" data-type="numeric" colspan="2">Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each matches}}
+        <tr>
+          <td data-value="{{date_time}}">{{formatDate date_time}}</td>
+          <td>{{findPlayerFromId ro_id}}</td>
+          <td>{{findPlayerFromId bo_id}}</td>
+          <td data-group="score-group">{{rs}}</td>
+          <td data-group="score-group">{{bs}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
   </div>
 </template>
 
 <template name="individual_stats">
-  <div class="row">
-    <div class="col-sm-8 col-sm-offset-2">
-      <div class="row">
-        <div class="col-sm-12"><h2 align="center">Individual Stats</h2></div>
-        <div class="col-sm-12" align="center">
-        <table class="footable table table-hover table-striped" id="individual_stats_table" data-page-navigation=".pagination">
-          <thead>
-          <tr>
-            <th>Name</th>
-            <th data-type="numeric" data-hide="phone">Wins</th>
-            <th data-type="numeric" data-hide="phone">Losses</th>
-            <th data-type="numeric" data-hide="phone">Win %</th>
-            <th data-type="numeric" data-hide="phone">Singles</th>
-            <th data-type="numeric" data-sort-initial="descending">Combined</th>
-          </tr>
-          </thead>
-          <tbody>
-          {{#each score}}
-          <tr>
-            <td>{{name}}</td>
-            <td>{{wins}}</td>
-            <td>{{losses}}</td>
-            <td>{{percent}}</td>
-            <td>{{singles_rating}}</td>
-            <td>{{combined_rating}}</td>
-          </tr>
-          {{/each}}
-          </tbody>
-          <tfoot class="hide-if-no-paging">
-          <tr>
-            <td colspan="8" class="text-center">
-              <div class="paging">
-                <ul class="pagination"></ul>
-              </div>
-            </td>
-          </tr>
-          </tfoot>
-        </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
-<template name="team_stats">
-  <div class="row">
-      <div class="col-sm-8 col-sm-offset-2">
-        <div class="row">
-          <div class="col-sm-12"><h2 align="center">Team Stats</h2></div>
-          <div class="col-sm-12">
-          <table class="footable table table-hover table-striped" id="team_stats_table" data-page-navigation=".pagination">
-            <thead>
-            <tr>
-              <th>Player A</th>
-              <th>Player B</th>
-              <th data-type="numeric" data-hide="phone">Wins</th>
-              <th data-type="numeric" data-hide="phone">Losses</th>
-              <th data-type="numeric" data-sort-initial="descending">Win %</th>
-            </tr>
-            </thead>
-            <tbody>
-            {{#each score}}
-            <tr>
-              <td>{{off_player}}</td>
-              <td>{{def_player}}</td>
-              <td>{{wins}}</td>
-              <td>{{losses}}</td>
-              <td>{{percent}}</td>
-            </tr>
-            {{/each}}
-            </tbody>
-            <tfoot class="hide-if-no-paging">
-            <tr>
-              <td colspan="5" class="text-center">
-                <div class="paging">
-                  <ul class="pagination"></ul>
-                </div>
-              </td>
-            </tr>
-            </tfoot>
-          </table>
+  <h2 align="center">Individual Stats</h2>
+  <table class="footable table table-hover table-striped" id="individual_stats_table" data-page-navigation=".pagination">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th data-type="numeric">Wins</th>
+        <th data-type="numeric">Losses</th>
+        <th data-type="numeric">Win %</th>
+        <th data-type="numeric" data-sort-initial="descending">Singles</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each score}}
+      <tr>
+        <td>{{name}}</td>
+        <td>{{wins}}</td>
+        <td>{{losses}}</td>
+        <td>{{percent}}</td>
+        <td>{{singles_rating}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+      <tr>
+        <td colspan="8" class="text-center">
+          <div class="paging">
+            <ul class="pagination"></ul>
           </div>
-        </div>
-    </div>
-  </div>
+        </td>
+      </tr>
+    </tfoot>
+   </table>
 </template>
 
 <template name="rules">

@@ -12,7 +12,6 @@ Router.configure({
   waitOn: function() {
     return [Meteor.subscribe('players'),
             Meteor.subscribe('matches'),
-            Meteor.subscribe('combined_ratings'),
             Meteor.subscribe('singles_ratings')];
   }
 });
@@ -23,10 +22,6 @@ Router.configure({
 Router.map(function() {
   this.route('home', {
     path: '/',
-    yieldTemplates: {
-      'header': { to: 'header' },
-      'sidebar': { to: 'sidebar' }
-    },
     layoutTemplate: 'layout',
     data: function() {
       if (this.ready()) {
@@ -37,17 +32,12 @@ Router.map(function() {
     },
     waitOn: function() {
       return [Meteor.subscribe('players'),
-              Meteor.subscribe('combined_ratings'),
               Meteor.subscribe('singles_ratings')];
     }
   });
 
   this.route('addmatch', {
     path: '/addmatch',
-    yieldTemplates: {
-      'header': { to: 'header' },
-      'sidebar': { to: 'sidebar' }
-    },
     waitOn: function() {
       return [Meteor.subscribe('matches'),
               Meteor.subscribe('players')];
@@ -56,48 +46,22 @@ Router.map(function() {
 
   this.route('addplayer', {
     path: '/addplayer',
-    yieldTemplates: {
-      'header': { to: 'header' },
-      'sidebar': { to: 'sidebar' }
-    },
     waitOn: function() {
       return [Meteor.subscribe('players'),
-              Meteor.subscribe('combined_ratings')];
     }
   });
 
   this.route('individual_stats', {
     path: '/individual_stats',
-    yieldTemplates: {
-      'header': { to: 'header' },
-      'sidebar': { to: 'sidebar' }
-    },
     waitOn: function() {
       return [Meteor.subscribe('matches'),
               Meteor.subscribe('players'),
-              Meteor.subscribe('combined_ratings'),
               Meteor.subscribe('singles_ratings')];
     }
   });
 
-  this.route('team_stats', {
-    path: '/team_stats',
-    yieldTemplates: {
-      'header': { to: 'header' },
-      'sidebar': { to: 'sidebar' }
-    },
-    waitOn: function() {
-      return [Meteor.subscribe('matches'),
-              Meteor.subscribe('players')];
-    }
-  });
-
   this.route('rules', {
-    path: '/rules',
-    yieldTemplates: {
-      'header': { to: 'header' },
-      'sidebar': { to: 'sidebar' }
-    }
+    path: '/rules'
   });
 
   // route with name 'notFound' that for example matches
@@ -105,10 +69,6 @@ Router.map(function() {
   // template 'notFound'
   // HINT: Define a global not found route as the very last route in your router
   this.route('notFound', {
-    path: '*',
-    yieldTemplates: {
-      'header': { to: 'header' },
-      'sidebar': { to: 'sidebar' }
-    }
+    path: '*'
   });
 });
