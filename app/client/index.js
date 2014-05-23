@@ -135,24 +135,6 @@ Template.home.rendered = function() {
 };
 
 
-/**  after individual_stats template is rendered */
-Template.individual_stats.rendered = function() {
-  $('.footable').footable();
-};
-
-
-/** after last_10_matches template is rendered */
-Template.last_10_matches.rendered = function() {
-  $('.footable').footable();
-};
-
-
-/** after last_10_players template is rendered */
-Template.last_10_players.rendered = function() {
-  $('.footable').footable();
-};
-
-
 /** after game_form template is rendered */
 Template.game_form.rendered = function() {
   var players = Players.find({}).fetch();

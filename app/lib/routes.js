@@ -47,7 +47,7 @@ Router.map(function() {
   this.route('addplayer', {
     path: '/addplayer',
     waitOn: function() {
-      return [Meteor.subscribe('players'),
+      return [Meteor.subscribe('players')]
     }
   });
 
