@@ -61,7 +61,7 @@
 </template>
 
 <template name="game_form">
-  {{#autoForm schema=matchForm id="gameform" novalidate="novalidate" type="method" meteormethod="add_match"}}
+  {{#autoForm schema=matchForm id="gameform" type="method" meteormethod="add_match"}}
     <fieldset>
       <div class="row">
         <div class="col-sm-8 col-sm-offset-2">
@@ -72,22 +72,14 @@
           </div>
           <div class="row">
             <div class="col-sm-6">
-              <div class="form-group{{#if afFieldIsInvalid name='ro'}} has-error{{/if}}">
-                <label style="text-align:left">Side 1</label>
-                {{> afFieldInput name='ro' firstOption="Select a player" options=players}}
-                {{#if afFieldIsInvalid name='ro'}}
-                <span class="help-block">{{> afFieldMessage name='ro'}}</span>
-                {{/if}}
+              <div>
+                {{> afQuickField name='ro' firstOption="Select a player" options=players}}
               </div>
             </div>
 
             <div class="col-sm-6">
-              <div class="form-group{{#if afFieldIsInvalid name='bo'}} has-error{{/if}}">
-                <label style="text-align:left">Side 2</label>
-                {{> afFieldInput name='bo' firstOption="Select a player" options=players}}
-                {{#if afFieldIsInvalid name='bo'}}
-                <span class="help-block">{{> afFieldMessage name='bo'}}</span>
-                {{/if}}
+              <div>
+                {{> afQuickField name='bo' firstOption="Select a player" options=players}}
               </div>
             </div>
           </div>
@@ -100,19 +92,13 @@
           </div>
           <div class="row">
             <div class="col-sm-6">
-              <div class="form-group{{#if afFieldIsInvalid name='rs'}} has-error{{/if}}">
-                {{> afFieldInput name='rs' placeholder="schemaLabel"}}
-                {{#if afFieldIsInvalid name='rs'}}
-                <span class="help-block">{{> afFieldMessage name='rs'}}</span>
-                {{/if}}
+              <div>
+                {{> afQuickField name='rs' placeholder="0"}}
               </div>
             </div>
             <div class="col-sm-6">
-              <div class="form-group{{#if afFieldIsInvalid name='bs'}} has-error{{/if}}">
-                {{> afFieldInput name='bs' placeholder="schemaLabel"}}
-                {{#if afFieldIsInvalid name='bs'}}
-                <span class="help-block">{{> afFieldMessage name='bs'}}</span>
-                {{/if}}
+              <div>
+                 {{> afQuickField name='bs' placeholder="0"}}
               </div>
             </div>
 

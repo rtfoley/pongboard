@@ -15,12 +15,16 @@ MatchFormSchema = new SimpleSchema({
   },
   rs: {
     type: Number,
-    label: 'Side 1 Score*',
+    label: 'Player 1 Score*',
     min: 0
   },
   bs: {
     type: Number,
-    label: 'Side 2 Score*',
+    label: 'Player 2 Score*',
     min: 0
   }
+});
+
+MatchFormSchema.messages({
+  
 });
