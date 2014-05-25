@@ -101,7 +101,7 @@ Template.last_10_matches.helpers({
 
 Template.individual_stats.helpers({
   players: function() {
-    return Meteor.users.find({}, {sort: {rating: -1}});
+    return Meteor.users.find({$or: [{ wins: {$gt: 0}}, {losses: {$gt: 0}}]}, {sort: {rating: -1}});
   },
   
   winPercentage: function(id) {
