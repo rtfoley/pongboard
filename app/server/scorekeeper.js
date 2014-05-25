@@ -13,6 +13,7 @@ Meteor.publish('users', function() {
   return Meteor.users.find({}, {fields: fields});
 });
 
+// Add custom fields to each user when they sign up
 Accounts.onCreateUser(function(options, user) {
   user.rating = 1200;
   user.wins = 0;
@@ -59,9 +60,11 @@ var updateAllRatings = function(doc, date) {
   var user1 = Meteor.users.findOne({"_id": doc.ro});
   var user2 = Meteor.users.findOne({"_id": doc.bo});
   
+  // Calculate new ratings
   newRating1 = updateRating(user1.rating, user2.rating, red_won);
   newRating2 = updateRating(user2.rating, user1.rating, !red_won);
   
+  // Calculate new win/ loss counts
   if(red_won) {
     newWins1 = user1.wins + 1;
     newLosses1 = user1.losses;
@@ -74,7 +77,7 @@ var updateAllRatings = function(doc, date) {
     newLosses2 = user2.losses;
   }
   
-  // Meteor.users.update()...
+  // Update user data
   Meteor.users.update(user1._id,{
     $set : {
       'rating':newRating1,
@@ -121,6 +124,7 @@ Meteor.startup(function() {
     });
   }
   */
+  
   var insertMatch = function(doc) {
     Matches.insert({
       date_time: Date.now(),

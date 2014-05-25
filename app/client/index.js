@@ -50,6 +50,7 @@ var pad = function(num, size) {
   return s;
 };
 
+// Replace this with Moment.js?
 Handlebars.registerHelper('formatDate', function(datetime) {
   var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -81,15 +82,6 @@ Template.game_form.helpers({
     return p;
   }
 });
-
-var printObjectProperties = function(obj) {
-  console.log('object:');
-  for (var param in obj) {
-    if (object.hasOwnProperty(param)) {
-      console.log('  ' + param + ' = ' + obj[param]);
-    }
-  }
-};
 
 Template.header.events({
   'click #menu-toggle': function() {
