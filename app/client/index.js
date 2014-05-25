@@ -105,7 +105,14 @@ Template.individual_stats.helpers({
   },
   
   winPercentage: function(id) {
+    var totalGames, rawPercentage;
     user = Meteor.users.findOne({_id: id});
-    return Math.round(user.wins/(user.wins+user.losses)*100);
+    totalGames = user.wins+user.losses;
+    rawPercentage = user.wins/totalGames;
+    return Math.round(rawPercentage*100);
+  },
+  
+  roundRating: function(rawRating) {
+    return Math.round(rawRating);
   }
 });
