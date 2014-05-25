@@ -10,9 +10,8 @@ Router.configure({
   loadingTemplate: 'loading',
   notFoundTemplate: 'notFound',
   waitOn: function() {
-    return [Meteor.subscribe('players'),
-            Meteor.subscribe('matches'),
-            Meteor.subscribe('singles_ratings')];
+    return [Meteor.subscribe('users'),
+            Meteor.subscribe('matches')];
   }
 });
 
@@ -23,40 +22,25 @@ Router.map(function() {
   this.route('home', {
     path: '/',
     layoutTemplate: 'layout',
-    data: function() {
-      if (this.ready()) {
-        Players.find();
-        CombinedRatings.find();
-        SinglesRatings.find();
-      }
-    },
     waitOn: function() {
-      return [Meteor.subscribe('players'),
-              Meteor.subscribe('singles_ratings')];
+      return [Meteor.subscribe('users'),
+              Meteor.subscribe('matches')];
     }
   });
 
   this.route('addmatch', {
     path: '/addmatch',
     waitOn: function() {
-      return [Meteor.subscribe('matches'),
-              Meteor.subscribe('players')];
-    }
-  });
-
-  this.route('addplayer', {
-    path: '/addplayer',
-    waitOn: function() {
-      return [Meteor.subscribe('players')]
+      return [Meteor.subscribe('users'),
+              Meteor.subscribe('matches')];
     }
   });
 
   this.route('individual_stats', {
     path: '/individual_stats',
     waitOn: function() {
-      return [Meteor.subscribe('matches'),
-              Meteor.subscribe('players'),
-              Meteor.subscribe('singles_ratings')];
+      return [Meteor.subscribe('users'),
+              Meteor.subscribe('matches')];
     }
   });
 

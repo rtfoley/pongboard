@@ -1,3 +1,11 @@
+Accounts.ui.config({
+  passwordSignupFields: 'USERNAME_ONLY'
+});
+
+Deps.autorun(function(){
+  Meteor.subscribe('users');
+});
+
 /** options for the spinner package */
 Meteor.Spinner.options = {
   // The number of lines to draw
@@ -55,63 +63,24 @@ Handlebars.registerHelper('formatDate', function(datetime) {
   return (y + m + d + ' ' + pad(h, 2) + ':' + pad(min, 2) + ':' + pad(s, 2));
 });
 
-Handlebars.registerHelper('findPlayerFromId', function(player_id) {
-  var player = Players.findOne({_id: player_id});
-  if (typeof player !== 'undefined') {
-    return player.name;
-  } else {
-    return 'N/A';
-  }
-});
-
-Handlebars.registerHelper('findPlayerFirstEloRatingFromId',
-                          function(player_id) {
-  var elo_rating = SinglesRatings.findOne({player_id: player_id},
-                                           {sort: {date_time: 1}});
-  if (typeof elo_rating !== 'undefined') {
-    return elo_rating.rating;
-  } else {
-    return 'N/A';
-  }
-});
-
 Template.game_form.helpers({
   matchForm: function() {
     return MatchFormSchema;
-  }
-});
-
-Template.player_form.helpers({
-  playerForm: function() {
-    return PlayerFormSchema;
-  }
-});
-
-var findPlayerLatestEloRatingFromId = function(player_id, collection) {
-  var elo_rating = collection.findOne({player_id: player_id},
-                                      {sort: {date_time: -1}});
-  if (typeof elo_rating !== 'undefined') {
-    return +elo_rating.rating.toFixed(0);
-  } else {
-    return 'N/A';
-  }
-};
-
-var addIndPlayersArray = function(players, id, win, loss) {
-  if (typeof players[id] !== 'undefined') {
-    players[id] = ({
-      wins: players[id].wins + win,
-      losses: players[id].losses + loss
+  },
+  
+  players: function() {
+    var p = [];
+    var uTemp = Meteor.users.find({}, {sort: {username: 1}});
+    uTemp.forEach(function(u) {
+      var ret = { 
+        value: u._id, 
+        label: u.username
+      };
+      p.push(ret);
     });
-  } else {
-    if ((typeof id !== 'undefined') && (id)) {
-      players[id] = ({
-        wins: win,
-        losses: loss
-      });
-    }
+    return p;
   }
-};
+});
 
 var printObjectProperties = function(obj) {
   console.log('object:');
@@ -128,80 +97,23 @@ Template.header.events({
   }
 });
 
-
-/** after home template is rendered */
-Template.home.rendered = function() {
-  
-};
-
-
-/** after game_form template is rendered */
-Template.game_form.rendered = function() {
-  var players = Players.find({}).fetch();
-  var names = [];
-  players.forEach(function(player) {
-    names.push(player.name);
-  });
-
-  $('.input_autocomplete').autocomplete({
-    source: names
-  });
-};
-
-Template.game_form.helpers({
-  
-});
-
 Template.last_10_matches.helpers({
   matches: function() {
     return Matches.find({}, {sort: {date_time: -1}, limit: 10});
-  }
-});
-
-Template.last_10_players.helpers({
-  players: function() {
-    return Players.find({}, {sort: {date_time: -1}, limit: 10});
+  },
+  
+  findPlayerFromId: function(id) {
+    return Meteor.users.findOne({_id: id}).username;
   }
 });
 
 Template.individual_stats.helpers({
-  score: function() {
-    var cursor = Matches.find({});
-    var players = {};
-    // loop through Matches to find all individuals and tally up scores
-    cursor.forEach(function(match) {
-      var red_win = 0;
-      var blue_win = 0;
-      if (parseInt(match.rs, 10) > parseInt(match.bs, 10)) {
-        red_win = 1;
-      } else {
-        blue_win = 1;
-      }
-
-      addIndPlayersArray(players, match.ro_id, red_win, blue_win);
-      addIndPlayersArray(players, match.bo_id, blue_win, red_win);
-    });
-
-    // now create a list that can be used for display
-    var p = [];
-    for (var id in players) {
-      if (players.hasOwnProperty(id)) {
-        var per = (players[id].wins /
-          (players[id].wins + players[id].losses));
-        if (typeof id !== 'undefined') {
-          var player = Players.findOne({_id: id});
-          p.push({
-            name: player.name,
-            wins: players[id].wins,
-            losses: players[id].losses,
-            percent: +(per * 100).toFixed(0) + '%',
-            singles_rating: findPlayerLatestEloRatingFromId(id,
-                                                            SinglesRatings)
-          });
-        }
-      }
-    }
-
-    return p;
+  players: function() {
+    return Meteor.users.find({}, {sort: {rating: -1}});
+  },
+  
+  winPercentage: function(id) {
+    user = Meteor.users.findOne({_id: id});
+    return Math.round(user.wins/(user.wins+user.losses)*100);
   }
 });

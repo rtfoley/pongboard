@@ -2,13 +2,29 @@ Meteor.publish('matches', function() {
   return Matches.find();
 });
 
-Meteor.publish('players', function() {
-  return Players.find();
+Meteor.publish('users', function() {
+  var fields = {
+    _id:1,
+    username:1, 
+    rating:1,
+    wins:1,
+    losses:1
+  }
+  return Meteor.users.find({}, {fields: fields});
 });
 
-Meteor.publish('singles_ratings', function() {
-  return SinglesRatings.find();
+Accounts.onCreateUser(function(options, user) {
+  user.rating = 1200;
+  user.wins = 0;
+  user.losses = 0;
+  // We still want the default hook's 'profile' behavior.
+  if (options.profile)
+    user.profile = options.profile;
+  
+  console.log('Look! A new user has been created');
+  return user;
 });
+
 
 // define some constants for Elo Ratings
 // we are using the Bonzini USA values:
@@ -23,117 +39,61 @@ var winExpectancy = function(rating, opponent_rating) {
   return We;
 };
 
-var updateRating = function(date, player_id, rating, opponent_rating,
-                             rating_to_adjust, win, collection) {
+var updateRating = function(rating, opponent_rating, win) {
+  
   var S = (win ? 1 : 0);
   var We = winExpectancy(rating, opponent_rating);
-  var Rn = rating_to_adjust + (K_RATING_COEFFICIENT * (S - We));
-
-  collection.insert({
-    date_time: date,
-    player_id: player_id,
-    rating: Rn
-  });
-
+  var Rn = rating + (K_RATING_COEFFICIENT * (S - We));
+  
   return Rn;
 };
 
-/**
-   * @param {string} player_name - name of the player
-   * @param {string} rating - initial player rating
-   * @return {string} id of the record
-   */
-var addPlayer = function(player_name, rating) {
-  var id = Players.findOne({name: player_name});
-  if (id) {
-    // player already in database, no need to add again
-    console.log('id already exists: ' + id._id);
-    return id._id;
-  }
-
-  // didn't find player above, so add one now
-  id = Players.insert({
-    date_time: Date.now(),
-    name: player_name
-  });
-
-  SinglesRatings.insert({
-    date_time: Date.now(),
-    player_id: id,
-    rating: rating
-  });
-
-  return id;
-};
-
-var getPlayerId = function(player_name) {
-  var id = Players.findOne({name: player_name});
-  if (id) {
-    return id._id;
-  } else {
-    // it should never get here since the MatchFormSchema should handle
-    // making sure the player exists first
-    return undefined;
-  }
-};
-
-var getPlayerName = function(player_id) {
-  var name = Players.findOne({_id: player_id});
-  if (name) {
-    return name.name;
-  } else {
-    return undefined;
-  }
-};
-
-var update1v1Ratings = function(ratingValues) {
-  // update singles ratings
-  updateRating(ratingValues.date, ratingValues.ro_id,
-               ratingValues.last_ro_singles_rating.rating,
-               ratingValues.last_bo_singles_rating.rating,
-               ratingValues.last_ro_singles_rating.rating,
-               ratingValues.red_won, SinglesRatings);
-  updateRating(ratingValues.date, ratingValues.bo_id,
-               ratingValues.last_bo_singles_rating.rating,
-               ratingValues.last_ro_singles_rating.rating,
-               ratingValues.last_bo_singles_rating.rating,
-               !ratingValues.red_won, SinglesRatings);
-};
-
 var updateAllRatings = function(doc, date) {
-  var ro_id, bo_id;
-  var last_ro_singles_rating, last_bo_singles_rating;
-
-  if (typeof doc.ro !== 'undefined') {
-    ro_id = getPlayerId(doc.ro);
-    last_ro_singles_rating = SinglesRatings.findOne(
-      {player_id: ro_id}, {sort: {date_time: -1}});
-  }
-  if (typeof doc.bo !== 'undefined') {
-    bo_id = getPlayerId(doc.bo);
-    last_bo_singles_rating = SinglesRatings.findOne(
-      {player_id: bo_id}, {sort: {date_time: -1}});
-  }
-
   var red_won;
+  var newRating1, newRating2, newWins1, newWins2, newLosses1, newLosses2;
   if (parseInt(doc.rs) > parseInt(doc.bs)) {
     red_won = true;
   } else {
     red_won = false;
   }
-
-  var ratingValues = {
-    date: date,
-    ro_id: ro_id,
-    bo_id: bo_id,
-    red_won: red_won,
-    last_ro_singles_rating: last_ro_singles_rating,
-    last_bo_singles_rating: last_bo_singles_rating
-  };
-  update1v1Ratings(ratingValues);
+  
+  var user1 = Meteor.users.findOne({"_id": doc.ro});
+  var user2 = Meteor.users.findOne({"_id": doc.bo});
+  
+  newRating1 = updateRating(user1.rating, user2.rating, red_won);
+  newRating2 = updateRating(user2.rating, user1.rating, !red_won);
+  
+  if(red_won) {
+    newWins1 = user1.wins + 1;
+    newLosses1 = user1.losses;
+    newWins2 = user2.wins;
+    newLosses2 = user2.losses + 1;
+  } else {
+    newWins1 = user1.wins;
+    newLosses1 = user1.losses + 1;
+    newWins2 = user2.wins + 1;
+    newLosses2 = user2.losses;
+  }
+  
+  // Meteor.users.update()...
+  Meteor.users.update(user1._id,{
+    $set : {
+      'rating':newRating1,
+      'wins':newWins1,
+      'losses':newLosses1
+    }
+  });
+  Meteor.users.update(user2._id,{
+    $set : {
+      'rating':newRating2,
+      'wins':newWins2,
+      'losses':newLosses2
+    }
+  });
 };
 
 Meteor.startup(function() {
+  /*
   if (Meteor.settings.recalculate_ratings === 'true') {
     console.log('recalculating ratings');
 
@@ -161,25 +121,17 @@ Meteor.startup(function() {
       updateAllRatings(doc, match.date_time);
     });
   }
-
+  */
   var insertMatch = function(doc) {
-    var ro_id, rd_id, bo_id, bd_id;
-    if (typeof doc.ro !== 'undefined') {
-      ro_id = getPlayerId(doc.ro);
-    }
-    if (typeof doc.bo !== 'undefined') {
-      bo_id = getPlayerId(doc.bo);
-    }
-    
     Matches.insert({
       date_time: Date.now(),
-      ro_id: ro_id,
-      bo_id: bo_id,
+      ro_id: doc.ro,
+      bo_id: doc.bo,
       rs: doc.rs,
       bs: doc.bs
     });
   };
-
+  
   Meteor.methods({
     add_match: function(doc) {
       // check the form against the schema
@@ -190,11 +142,6 @@ Meteor.startup(function() {
 
       // update all ratings
       updateAllRatings(doc, Date.now());
-    },
-
-    add_player: function(doc) {
-      check(doc, PlayerFormSchema);
-      addPlayer(doc.player_name, doc.rating);
     }
   });
 });
