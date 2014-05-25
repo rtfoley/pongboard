@@ -21,7 +21,6 @@ Accounts.onCreateUser(function(options, user) {
   if (options.profile)
     user.profile = options.profile;
   
-  console.log('Look! A new user has been created');
   return user;
 });
 
