@@ -42,26 +42,9 @@ Meteor.Spinner.options = {
   left: 'auto'
 };
 
-var pad = function(num, size) {
-  var s = num + '';
-  while (s.length < size) {
-    s = '0' + s;
-  }
-  return s;
-};
-
 // Replace this with Moment.js?
 Handlebars.registerHelper('formatDate', function(datetime) {
-  var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  var dt = new Date(datetime);
-  var d = dt.getDate();
-  var m = monthNames[dt.getMonth()];
-  var y = dt.getFullYear();
-  var h = dt.getHours();
-  var min = dt.getMinutes();
-  var s = dt.getSeconds();
-  return (y + m + d + ' ' + pad(h, 2) + ':' + pad(min, 2) + ':' + pad(s, 2));
+  return moment(datetime).format('MMMM Do YYYY, h:mm:ss a');
 });
 
 Template.game_form.helpers({
