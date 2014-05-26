@@ -1,17 +1,16 @@
-# scorekeeper
+# pongboard
 
-scorekeeper is a simple web interface for keeping track of scores and providing
-some statistical information for players/matches.  For now, scorekeeper is
-geared only for foosball.
+Pongboard is a simple web interface for keeping track of scores and providing
+some statistical information for players/matches.  This software is based on https://github.com/gui81/scorekeeper
 
 ## Quick Start
 
-### Checkout scorekeeper:
-    git clone https://github.com/gui81/scorekeeper.git
+### Checkout pongboard:
+    https://github.com/rtfoley/pongboard.git
 
 ### Get Meteor and Meteorite
 Install [meteor.js] (https://www.meteor.com/) and install [meteorite] (http://oortcloud.github.io/meteorite/).
 
 ### Run
-    cd scorekeeper
+    cd pongboard
     mrt
