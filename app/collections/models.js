@@ -8,23 +8,33 @@ MatchFormSchema = new SimpleSchema({
   ro: {
     type: String,
     label: 'Player 1*',
+    custom: function () {
+      if (this.value == this.field('bo').value) {
+        return "samePlayer";
+      }
+    }
   },
   bo: {
     type: String,
     label: 'Player 2*',
+    custom: function () {
+      if (this.value == this.field('ro').value) {
+        return "samePlayer";
+      }
+    }
   },
   rs: {
     type: Number,
     label: 'Player 1 Score*',
-    min: 0
+    min: 0,
   },
   bs: {
     type: Number,
     label: 'Player 2 Score*',
-    min: 0
+    min: 0,
   }
 });
 
 MatchFormSchema.messages({
-  
+  "samePlayer": "Players can not be the same"
 });
