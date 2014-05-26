@@ -30,11 +30,7 @@ MatchFormSchema = new SimpleSchema({
     custom: function() {
       var thisScore = this.value;
       var theirScore = this.field('bs').value;
-      if(thisScore > theirScore && thisScore < theirScore + 2) {
-        return "illegalWin";
-      } else if(thisScore == theirScore) {
-        return "sameScore";
-      }
+      return checkScore(thisScore, theirScore);
     }
   },
   bs: {
@@ -44,11 +40,7 @@ MatchFormSchema = new SimpleSchema({
     custom: function() {
       var thisScore = this.value;
       var theirScore = this.field('rs').value;
-      if(thisScore > theirScore && thisScore < theirScore + 2) {
-        return "illegalWin";
-      } else if(thisScore == theirScore) {
-        return "sameScore";
-      }
+      return checkScore(thisScore, theirScore);
     }
   }
 });
@@ -58,3 +50,11 @@ MatchFormSchema.messages({
   "illegalWin": "Winner must win by at least 2 points",
   "sameScore": "Game cannot end in a tie"
 });
+
+var checkScore = function(thisScore, theirScore) {
+  if(thisScore > theirScore && thisScore < theirScore + 2) {
+    return "illegalWin";
+  } else if(thisScore == theirScore) {
+    return "sameScore";
+  }
+}
