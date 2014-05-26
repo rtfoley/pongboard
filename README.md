@@ -5,7 +5,7 @@ some statistical information for players/matches.  This software is based on htt
 
 ## Quick Start
 
-### Checkout pongboard:
+### Checkout scorekeeper:
     https://github.com/rtfoley/pongboard.git
 
 ### Get Meteor and Meteorite
