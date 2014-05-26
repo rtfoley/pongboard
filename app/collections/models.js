@@ -27,14 +27,34 @@ MatchFormSchema = new SimpleSchema({
     type: Number,
     label: 'Player 1 Score*',
     min: 0,
+    custom: function() {
+      var thisScore = this.value;
+      var theirScore = this.field('bs').value;
+      if(thisScore > theirScore && thisScore < theirScore + 2) {
+        return "illegalWin";
+      } else if(thisScore == theirScore) {
+        return "sameScore";
+      }
+    }
   },
   bs: {
     type: Number,
     label: 'Player 2 Score*',
     min: 0,
+    custom: function() {
+      var thisScore = this.value;
+      var theirScore = this.field('rs').value;
+      if(thisScore > theirScore && thisScore < theirScore + 2) {
+        return "illegalWin";
+      } else if(thisScore == theirScore) {
+        return "sameScore";
+      }
+    }
   }
 });
 
 MatchFormSchema.messages({
-  "samePlayer": "Players can not be the same"
+  "samePlayer": "Players can not be the same",
+  "illegalWin": "Winner must win by at least 2 points",
+  "sameScore": "Game cannot end in a tie"
 });
