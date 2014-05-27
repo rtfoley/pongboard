@@ -28,8 +28,8 @@ Router.map(function() {
     }
   });
 
-  this.route('addmatch', {
-    path: '/addmatch',
+  this.route('add_game', {
+    path: '/add_game',
     waitOn: function() {
       return [Meteor.subscribe('users'),
               Meteor.subscribe('matches')];
@@ -44,16 +44,16 @@ Router.map(function() {
     }
   });
   
-  this.route('games', {
-    path: '/games',
+  this.route('game_list', {
+    path: '/game_list',
     waitOn: function() {
       return [Meteor.subscribe('users'),
               Meteor.subscribe('matches')];
     }
   });
 
-  this.route('rules', {
-    path: '/rules'
+  this.route('about', {
+    path: '/about'
   });
 
   // route with name 'notFound' that for example matches

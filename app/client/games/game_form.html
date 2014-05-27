@@ -1,0 +1,53 @@
+<template name="game_form">
+  {{#autoForm schema=matchForm id="gameform" type="method" meteormethod="add_match"}}
+    <fieldset>
+      <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
+          <div class="row">
+            <div class="col-sm-12" style="text-align:center">
+              <h4 align="center">Players</h4>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div>
+                {{> afQuickField name='ro' firstOption="Select a player" options=players}}
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <div>
+                {{> afQuickField name='bo' firstOption="Select a player" options=players}}
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <hr>
+            <div class="col-sm-12" style="text-align:center">
+              <h4 align="center">Scores</h4>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div>
+                {{> afQuickField name='rs' placeholder="0"}}
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div>
+                 {{> afQuickField name='bs' placeholder="0"}}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12" style="text-align:center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  {{/autoForm}}
+</template>

@@ -1,0 +1,12 @@
+<template name="game_list">
+  <div class="container-fluid">
+    <div class="row">
+      <h2 align="center">Games</h2>
+      {{#gamesTableWrapper}}
+        {{#each matches}}
+          {{> game_row}}
+        {{/each}}
+      {{/gamesTableWrapper}}
+    </div>
+  </div>
+</template>

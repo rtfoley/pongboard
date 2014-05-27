@@ -1,0 +1,26 @@
+<template name="gamesTableWrapper">
+  <table class="table table-hover table-striped" id="games_table">
+    <thead>
+      <tr>
+        <th>Date/Time</th>
+        <th>Player 1</th>
+        <th>Score</th>
+        <th>Player 2</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{> UI.contentBlock}}
+    </tbody>
+  </table>
+</template>
+
+<template name="game_row">
+  <tr>
+    <td>{{formatDate date_time}}</td>
+    <td class="{{getResultClass rs bs}}">{{findPlayerFromId ro_id}}</td>
+    <td class="{{getResultClass rs bs}}">{{bs}}</td>
+    <td class="{{getResultClass bs rs}}">{{findPlayerFromId bo_id}}</td>
+    <td class="{{getResultClass bs rs}}">{{rs}}</td>
+  </tr>
+</template>

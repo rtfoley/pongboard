@@ -1,0 +1,12 @@
+<template name="recent_games">
+  <div class="container-fluid">
+    <div class="row">
+      <h2 align="center">Recent Games</h2>
+      {{#gamesTableWrapper}}
+        {{#each matches}}
+          {{> game_row}}
+        {{/each}}
+      {{/gamesTableWrapper}}
+    </div>
+  </div>
+</template>
