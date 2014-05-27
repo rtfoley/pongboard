@@ -43,6 +43,14 @@ Router.map(function() {
               Meteor.subscribe('matches')];
     }
   });
+  
+  this.route('games', {
+    path: '/games',
+    waitOn: function() {
+      return [Meteor.subscribe('users'),
+              Meteor.subscribe('matches')];
+    }
+  });
 
   this.route('rules', {
     path: '/rules'

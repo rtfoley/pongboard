@@ -72,7 +72,13 @@ Template.header.events({
   }
 });
 
-Template.last_10_matches.helpers({
+Template.games.helpers({
+  matches: function() {
+    return Matches.find({}, {sort: {date_time: -1}});
+  }
+});
+
+Template.last_10_games.helpers({
   matches: function() {
     return Matches.find({}, {sort: {date_time: -1}, limit: 10});
   }
