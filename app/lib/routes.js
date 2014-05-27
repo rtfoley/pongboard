@@ -35,6 +35,13 @@ Router.map(function() {
               Meteor.subscribe('matches')];
     }
   });
+  
+  this.route('add_player', {
+    path: '/add_player',
+    waitOn: function() {
+      return [Meteor.subscribe('users')];
+    }
+  });
 
   this.route('rankings', {
     path: '/rankings',

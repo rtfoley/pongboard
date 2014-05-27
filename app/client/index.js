@@ -3,7 +3,7 @@ Accounts.ui.config({
 });
 
 Deps.autorun(function(){
-  Meteor.subscribe('users');
+  Meteor.subscribe('players');
 });
 
 /** options for the spinner package */
@@ -54,11 +54,11 @@ Template.game_form.helpers({
   
   players: function() {
     var p = [];
-    var uTemp = Meteor.users.find({}, {sort: {username: 1}});
+    var uTemp = Players.find({}, {sort: {name: 1}});
     uTemp.forEach(function(u) {
       var ret = { 
         value: u._id, 
-        label: u.username
+        label: u.name
       };
       p.push(ret);
     });
@@ -86,7 +86,7 @@ Template.recent_games.helpers({
 
 Template.game_row.helpers({
   findPlayerFromId: function(id) {
-    return Meteor.users.findOne({_id: id}).username;
+    return Players.findOne({_id: id}).name;
   },
   
   getResultClass: function(thisScore, theirScore) {
@@ -100,14 +100,26 @@ Template.game_row.helpers({
 
 Template.rankings.helpers({
   players: function() {
-    return Meteor.users.find({$or: [{ wins: {$gt: 0}}, {losses: {$gt: 0}}]}, {sort: {rating: -1}});
+    return Players.find({$or: [{ wins: {$gt: 0}}, {losses: {$gt: 0}}]}, {sort: {rating: -1}});
   }
 });
+
+Template.new_players.helpers({
+  players: function() {
+    return Players.find({}, {sort: {date_time: -1}, limit: 10});
+  }
+})
+
+Template.player_form.helpers({
+  playerForm: function() {
+    return PlayerFormSchema;
+  }
+})
 
 Template.player_row.helpers({
   winPercentage: function(id) {
     var totalGames;
-    user = Meteor.users.findOne({_id: id});
+    user = Players.findOne({_id: id});
     totalGames = user.wins+user.losses;
     if(totalGames===0) {
       return "---"

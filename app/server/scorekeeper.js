@@ -2,28 +2,37 @@ Meteor.publish('matches', function() {
   return Matches.find();
 });
 
-Meteor.publish('users', function() {
+Meteor.publish('players', function() {
   var fields = {
     _id:1,
-    username:1, 
+    date_time: 1,
+    name:1, 
     rating:1,
     wins:1,
     losses:1
   }
-  return Meteor.users.find({}, {fields: fields});
+  return Players.find({}, {fields: fields});
 });
 
-// Add custom fields to each user when they sign up
-Accounts.onCreateUser(function(options, user) {
-  user.rating = 1200;
-  user.wins = 0;
-  user.losses = 0;
-  // We still want the default hook's 'profile' behavior.
-  if (options.profile)
-    user.profile = options.profile;
-  
-  return user;
-});
+var addPlayer = function(player_name) {
+  var id = Players.findOne({name: player_name});
+  if (id) {
+    // player already in database, no need to add again
+    console.log('id already exists: ' + id._id);
+    return id._id;
+  }
+
+  // didn't find player above, so add one now
+  id = Players.insert({
+    date_time: Date.now(),
+    name: player_name,
+    rating: 1200,
+    wins: 0,
+    losses: 0
+  });
+
+  return id;
+};
 
 
 // define some constants for Elo Ratings
@@ -57,8 +66,8 @@ var updateAllRatings = function(doc, date) {
     red_won = false;
   }
   
-  var user1 = Meteor.users.findOne({"_id": doc.ro});
-  var user2 = Meteor.users.findOne({"_id": doc.bo});
+  var user1 = Players.findOne({"_id": doc.ro});
+  var user2 = Players.findOne({"_id": doc.bo});
   
   // Calculate new ratings
   newRating1 = updateRating(user1.rating, user2.rating, red_won);
@@ -78,14 +87,14 @@ var updateAllRatings = function(doc, date) {
   }
   
   // Update user data
-  Meteor.users.update(user1._id,{
+  Players.update(user1._id,{
     $set : {
       'rating':newRating1,
       'wins':newWins1,
       'losses':newLosses1
     }
   });
-  Meteor.users.update(user2._id,{
+  Players.update(user2._id,{
     $set : {
       'rating':newRating2,
       'wins':newWins2,
@@ -145,6 +154,10 @@ Meteor.startup(function() {
 
       // update all ratings
       updateAllRatings(doc, Date.now());
+    },
+    add_player: function(doc) {
+      check(doc, PlayerFormSchema);
+      addPlayer(doc.player_name, doc.rating);
     }
   });
 });

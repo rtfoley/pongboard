@@ -16,13 +16,13 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href="{{pathFor 'add_game'}}">Add Game</a></li>
             <li><a href="{{pathFor 'game_list'}}">Games</a></li>
             <li><a href="{{pathFor 'rankings'}}">Rankings</a></li>
             <li><a href="{{pathFor 'about'}}">About</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            {{> loginButtons}}
+            <li><a href="{{pathFor 'add_game'}}">Add Game</a></li>
+            <li><a href="{{pathFor 'add_player'}}">Add Player</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->

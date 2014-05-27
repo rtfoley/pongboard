@@ -1,6 +1,7 @@
 // using autoform, simple-schema, and Collections2 packages to validate inserts
 // against schema to ensure data integrity
 Matches = new Meteor.Collection('matches');
+Players = new Meteor.Collection('players');
 
 // here we are creating a SimpleSchema because date_time is in the Collection,
 // but not in the form
@@ -42,6 +43,14 @@ MatchFormSchema = new SimpleSchema({
       var theirScore = this.field('rs').value;
       return checkScore(thisScore, theirScore);
     }
+  }
+});
+
+PlayerFormSchema = new SimpleSchema({
+  player_name: {
+    type: String,
+    label: 'Name*',
+    min: 2
   }
 });
 
