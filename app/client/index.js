@@ -101,8 +101,10 @@ Template.game_row.helpers({
 Template.rankings.helpers({
   players: function() {
     return Meteor.users.find({$or: [{ wins: {$gt: 0}}, {losses: {$gt: 0}}]}, {sort: {rating: -1}});
-  },
-  
+  }
+});
+
+Template.player_row.helpers({
   winPercentage: function(id) {
     var totalGames;
     user = Meteor.users.findOne({_id: id});

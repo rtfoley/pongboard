@@ -171,7 +171,16 @@
 <template name="rankings">
   <div class="container-fluid">
     <h2 align="center">Rankings</h2>
-    <table class="table table-hover table-striped" id="rankings_table">
+    {{#playerTableWrapper}}
+      {{#each players}}
+        {{> player_row}}
+      {{/each}}
+    {{/playerTableWrapper}}
+  </div>
+</template>
+
+<template name="playerTableWrapper">
+  <table class="table table-hover table-striped" id="rankings_table">
       <thead>
         <tr>
           <th>Name</th>
@@ -182,18 +191,19 @@
         </tr>
       </thead>
       <tbody>
-        {{#each players}}
-        <tr>
-          <td>{{username}}</td>
-          <td>{{wins}}</td>
-          <td>{{losses}}</td>
-          <td>{{winPercentage _id}}</td>
-          <td>{{roundRating rating}}</td>
-        </tr>
-        {{/each}}
+        {{> UI.contentBlock}}
       </tbody>
     </table>
-  </div>
+</template>
+
+<template name="player_row">
+  <tr>
+    <td>{{username}}</td>
+    <td>{{wins}}</td>
+    <td>{{losses}}</td>
+    <td>{{winPercentage _id}}</td>
+    <td>{{roundRating rating}}</td>
+  </tr>
 </template>
 
 <template name="rules">
