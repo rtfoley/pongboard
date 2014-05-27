@@ -98,7 +98,7 @@ Template.game_row.helpers({
   }
 });
 
-Template.individual_stats.helpers({
+Template.rankings.helpers({
   players: function() {
     return Meteor.users.find({$or: [{ wins: {$gt: 0}}, {losses: {$gt: 0}}]}, {sort: {rating: -1}});
   },

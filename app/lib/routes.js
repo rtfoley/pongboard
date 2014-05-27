@@ -36,8 +36,8 @@ Router.map(function() {
     }
   });
 
-  this.route('individual_stats', {
-    path: '/individual_stats',
+  this.route('rankings', {
+    path: '/rankings',
     waitOn: function() {
       return [Meteor.subscribe('users'),
               Meteor.subscribe('matches')];
