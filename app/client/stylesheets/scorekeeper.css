@@ -28,6 +28,14 @@
   padding: 20px;
 }
 
+.winner {
+  font-weight: bold;
+}
+
+.loser {
+
+}
+
 @media (max-width:767px) {
 
 #wrapper {

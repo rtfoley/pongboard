@@ -75,10 +75,20 @@ Template.header.events({
 Template.last_10_matches.helpers({
   matches: function() {
     return Matches.find({}, {sort: {date_time: -1}, limit: 10});
-  },
-  
+  }
+});
+
+Template.game_row.helpers({
   findPlayerFromId: function(id) {
     return Meteor.users.findOne({_id: id}).username;
+  },
+  
+  getResultClass: function(thisScore, theirScore) {
+    if(thisScore > theirScore) {
+      return "winner";
+    } else {
+      return "loser";
+    }
   }
 });
 
