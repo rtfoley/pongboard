@@ -14,27 +14,6 @@ Meteor.publish('players', function() {
   return Players.find({}, {fields: fields});
 });
 
-var addPlayer = function(player_name) {
-  var id = Players.findOne({name: player_name});
-  if (id) {
-    // player already in database, no need to add again
-    console.log('id already exists: ' + id._id);
-    return id._id;
-  }
-
-  // didn't find player above, so add one now
-  id = Players.insert({
-    date_time: Date.now(),
-    name: player_name,
-    rating: 1200,
-    wins: 0,
-    losses: 0
-  });
-
-  return id;
-};
-
-
 // define some constants for Elo Ratings
 // we are using the Bonzini USA values:
 //   http://www.bonziniusa.com/foosball/tournament/TournamentRankingSystem.html
@@ -133,6 +112,18 @@ Meteor.startup(function() {
     });
   }
   */
+  
+  var addPlayer = function(player_name) {
+    id = Players.insert({
+      date_time: Date.now(),
+      name: player_name,
+      rating: 1200,
+      wins: 0,
+      losses: 0
+    });
+
+    return id;
+  };
   
   var insertMatch = function(doc) {
     Matches.insert({

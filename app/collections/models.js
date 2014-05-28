@@ -50,7 +50,15 @@ PlayerFormSchema = new SimpleSchema({
   player_name: {
     type: String,
     label: 'Name*',
-    min: 2
+    min: 2,
+    custom: function() {
+      var id = Players.findOne({name: this.value});
+      if (id) {
+        // player already in database, no need to add again
+        console.log('id already exists: ' + id._id);
+        return "alreadyExists";
+      }
+    }
   }
 });
 
@@ -58,6 +66,10 @@ MatchFormSchema.messages({
   "samePlayer": "Players can not be the same",
   "illegalWin": "Winner must win by at least 2 points",
   "sameScore": "Game cannot end in a tie"
+});
+
+PlayerFormSchema.messages({
+  "alreadyExists": "Player already exists"
 });
 
 var checkScore = function(thisScore, theirScore) {
