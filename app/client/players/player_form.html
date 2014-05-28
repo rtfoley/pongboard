@@ -1,0 +1,16 @@
+<template name="player_form">
+  {{#autoForm schema=playerForm id="playerform" type="method" meteormethod="add_player"}}
+    <fieldset>
+      <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+          <div>
+            {{> afQuickField name='player_name'}}
+          </div>
+          <div style="text-align:center">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  {{/autoForm}}
+</template>

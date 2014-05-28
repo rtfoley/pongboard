@@ -1,0 +1,24 @@
+<template name="new_players">
+  <hr>
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <h3 align="center">Recently Added Players</h3>
+      <table class="footable table table-hover table-striped" id="new_players_table">
+        <thead>
+          <tr>
+            <th>Date Added</th>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each players}}
+            <tr>
+              <td>{{formatDate date_time}}</td>
+              <td>{{name}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
