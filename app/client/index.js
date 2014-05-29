@@ -43,8 +43,29 @@ Meteor.Spinner.options = {
 };
 
 // Replace this with Moment.js?
-Handlebars.registerHelper('formatDate', function(datetime) {
-  return moment(datetime).format('MMMM Do YYYY, h:mm:ss a');
+UI.registerHelper('formatDate', function(context, options) {
+  if(context) {
+    return moment(context).format('MMMM Do YYYY, h:mm:ss a');
+  }
+});
+
+UI.registerHelper('winPercentage', function(context, options){
+  if(context) {
+    var totalGames;
+    var user = Players.findOne({_id: context});
+    totalGames = user.wins+user.losses;
+    if(totalGames===0) {
+      return "---"
+    } else {
+      return Math.round(user.wins/totalGames*100);
+    }
+  }
+});
+  
+UI.registerHelper('roundRating', function(context, options) {
+  if(context) {
+    return Math.round(context);
+  }
 });
 
 Template.game_form.helpers({
@@ -104,31 +125,20 @@ Template.rankings.helpers({
   }
 });
 
+Template.player_list.helpers({
+  players: function() {
+    return Players.find({}, {sort: {name: 1}});
+  }
+});
+
 Template.new_players.helpers({
   players: function() {
     return Players.find({}, {sort: {date_time: -1}, limit: 10});
   }
-})
+});
 
 Template.player_form.helpers({
   playerForm: function() {
     return PlayerFormSchema;
-  }
-})
-
-Template.player_row.helpers({
-  winPercentage: function(id) {
-    var totalGames;
-    user = Players.findOne({_id: id});
-    totalGames = user.wins+user.losses;
-    if(totalGames===0) {
-      return "---"
-    } else {
-      return Math.round(user.wins/totalGames*100);
-    }
-  },
-  
-  roundRating: function(rawRating) {
-    return Math.round(rawRating);
   }
 });

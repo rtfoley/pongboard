@@ -10,7 +10,7 @@ Router.configure({
   loadingTemplate: 'loading',
   notFoundTemplate: 'notFound',
   waitOn: function() {
-    return [Meteor.subscribe('users'),
+    return [Meteor.subscribe('players'),
             Meteor.subscribe('matches')];
   }
 });
@@ -23,7 +23,7 @@ Router.map(function() {
     path: '/',
     layoutTemplate: 'layout',
     waitOn: function() {
-      return [Meteor.subscribe('users'),
+      return [Meteor.subscribe('players'),
               Meteor.subscribe('matches')];
     }
   });
@@ -31,7 +31,7 @@ Router.map(function() {
   this.route('add_game', {
     path: '/add_game',
     waitOn: function() {
-      return [Meteor.subscribe('users'),
+      return [Meteor.subscribe('players'),
               Meteor.subscribe('matches')];
     }
   });
@@ -39,14 +39,14 @@ Router.map(function() {
   this.route('add_player', {
     path: '/add_player',
     waitOn: function() {
-      return [Meteor.subscribe('users')];
+      return [Meteor.subscribe('players')];
     }
   });
 
   this.route('rankings', {
     path: '/rankings',
     waitOn: function() {
-      return [Meteor.subscribe('users'),
+      return [Meteor.subscribe('players'),
               Meteor.subscribe('matches')];
     }
   });
@@ -54,8 +54,25 @@ Router.map(function() {
   this.route('game_list', {
     path: '/game_list',
     waitOn: function() {
-      return [Meteor.subscribe('users'),
+      return [Meteor.subscribe('players'),
               Meteor.subscribe('matches')];
+    }
+  });
+  
+  this.route('player_list', {
+    path: '/players',
+    waitOn: function() {
+      return [Meteor.subscribe('players')];
+    }
+  });
+  
+  this.route('player_page', {
+    path: '/players/:_id',
+    waitOn: function() {
+      return [Meteor.subscribe('players')];
+    },
+    data: function() { 
+      return Players.findOne(this.params._id);
     }
   });
 

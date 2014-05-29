@@ -17,7 +17,7 @@
 
 <template name="player_row">
   <tr>
-    <td>{{name}}</td>
+    <td><a href="{{pathFor 'player_page'}}">{{name}}</a></td>
     <td>{{wins}}</td>
     <td>{{losses}}</td>
     <td>{{winPercentage _id}}</td>
