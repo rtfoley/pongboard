@@ -3,7 +3,7 @@ Accounts.ui.config({
 });
 
 Deps.autorun(function(){
-  Meteor.subscribe('users');
+  Meteor.subscribe('players');
 });
 
 /** options for the spinner package */
@@ -43,8 +43,29 @@ Meteor.Spinner.options = {
 };
 
 // Replace this with Moment.js?
-Handlebars.registerHelper('formatDate', function(datetime) {
-  return moment(datetime).format('MMMM Do YYYY, h:mm:ss a');
+UI.registerHelper('formatDate', function(context, options) {
+  if(context) {
+    return moment(context).format('MMMM Do YYYY, h:mm:ss a');
+  }
+});
+
+UI.registerHelper('winPercentage', function(context, options){
+  if(context) {
+    var totalGames;
+    var user = Players.findOne({_id: context});
+    totalGames = user.wins+user.losses;
+    if(totalGames===0) {
+      return "---"
+    } else {
+      return Math.round(user.wins/totalGames*100);
+    }
+  }
+});
+  
+UI.registerHelper('roundRating', function(context, options) {
+  if(context) {
+    return Math.round(context);
+  }
 });
 
 Template.game_form.helpers({
@@ -54,11 +75,11 @@ Template.game_form.helpers({
   
   players: function() {
     var p = [];
-    var uTemp = Meteor.users.find({}, {sort: {username: 1}});
+    var uTemp = Players.find({}, {sort: {name: 1}});
     uTemp.forEach(function(u) {
       var ret = { 
         value: u._id, 
-        label: u.username
+        label: u.name
       };
       p.push(ret);
     });
@@ -72,33 +93,52 @@ Template.header.events({
   }
 });
 
-Template.last_10_matches.helpers({
+Template.game_list.helpers({
   matches: function() {
-    return Matches.find({}, {sort: {date_time: -1}, limit: 10});
-  },
-  
-  findPlayerFromId: function(id) {
-    return Meteor.users.findOne({_id: id}).username;
+    return Matches.find({}, {sort: {date_time: -1}});
   }
 });
 
-Template.individual_stats.helpers({
-  players: function() {
-    return Meteor.users.find({$or: [{ wins: {$gt: 0}}, {losses: {$gt: 0}}]}, {sort: {rating: -1}});
+Template.recent_games.helpers({
+  matches: function() {
+    return Matches.find({}, {sort: {date_time: -1}, limit: 10});
+  }
+});
+
+Template.game_row.helpers({
+  findPlayerFromId: function(id) {
+    return Players.findOne({_id: id}).name;
   },
   
-  winPercentage: function(id) {
-    var totalGames;
-    user = Meteor.users.findOne({_id: id});
-    totalGames = user.wins+user.losses;
-    if(totalGames===0) {
-      return "---"
+  getResultClass: function(thisScore, theirScore) {
+    if(thisScore > theirScore) {
+      return "winner";
     } else {
-      return Math.round(user.wins/totalGames*100);
+      return "loser";
     }
-  },
-  
-  roundRating: function(rawRating) {
-    return Math.round(rawRating);
+  }
+});
+
+Template.rankings.helpers({
+  players: function() {
+    return Players.find({$or: [{ wins: {$gt: 0}}, {losses: {$gt: 0}}]}, {sort: {rating: -1}});
+  }
+});
+
+Template.player_list.helpers({
+  players: function() {
+    return Players.find({}, {sort: {name: 1}});
+  }
+});
+
+Template.new_players.helpers({
+  players: function() {
+    return Players.find({}, {sort: {date_time: -1}, limit: 10});
+  }
+});
+
+Template.player_form.helpers({
+  playerForm: function() {
+    return PlayerFormSchema;
   }
 });

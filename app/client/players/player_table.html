@@ -1,0 +1,26 @@
+<template name="playerTableWrapper">
+  <table class="table table-hover table-striped" id="rankings_table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Wins</th>
+          <th>Losses</th>
+          <th>Win %</th>
+          <th>Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{> UI.contentBlock}}
+      </tbody>
+    </table>
+</template>
+
+<template name="player_row">
+  <tr>
+    <td><a href="{{pathFor 'player_page'}}">{{name}}</a></td>
+    <td>{{wins}}</td>
+    <td>{{losses}}</td>
+    <td>{{winPercentage _id}}</td>
+    <td>{{roundRating rating}}</td>
+  </tr>
+</template>

@@ -1,0 +1,10 @@
+<template name="player_list">
+  <div class="container-fluid">
+    <h2 align="center">Players</h2>
+    {{#playerTableWrapper}}
+      {{#each players}}
+        {{> player_row}}
+      {{/each}}
+    {{/playerTableWrapper}}
+  </div>
+</template>
