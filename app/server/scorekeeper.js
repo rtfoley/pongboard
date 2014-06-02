@@ -83,35 +83,34 @@ var updateAllRatings = function(doc, date) {
 };
 
 Meteor.startup(function() {
-  /*
+  
   if (Meteor.settings.recalculate_ratings === 'true') {
     console.log('recalculating ratings');
 
-    SinglesRatings.remove({});
-
-    var INITIAL_RATING = 1250;
+    var INITIAL_RATING = 1200;
     var players = Players.find({}, {sort: {date_time: 1}});
     players.forEach(function(player) {
       // add an initial rating for each rating being tracked
-      SinglesRatings.insert({
-        date_time: player.date_time,
-        player_id: player._id,
-        rating: INITIAL_RATING
+      Players.update(player._id,{
+        $set : {
+          'rating':INITIAL_RATING,
+          'wins': 0,
+          'losses': 0
+        }
       });
     });
 
     var matches = Matches.find({}, {sort: {date_time: 1}});
     matches.forEach(function(match) {
       var doc = ({
-        ro: getPlayerName(match.ro_id),
-        bo: getPlayerName(match.bo_id),
+        ro: match.ro_id,
+        bo: match.bo_id,
         rs: match.rs,
         bs: match.bs
       });
       updateAllRatings(doc, match.date_time);
     });
   }
-  */
   
   var addPlayer = function(player_name) {
     id = Players.insert({
