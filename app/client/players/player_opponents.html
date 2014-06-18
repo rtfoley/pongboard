@@ -1,0 +1,19 @@
+<template name="player_opponents">
+  <h3 align="center">Opponents</h3>
+  <table class="table table-hover table-striped" id="games_table">
+    <thead>
+      <tr>
+        <th>Opponent</th>
+        <th>Game Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each getOpponents this.currentPlayer}}
+      <tr>
+        <td>{{findPlayerFromId playerId}}</td>
+        <td>{{count}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</template>

@@ -127,10 +127,6 @@ Template.recent_games.helpers({
   }
 });
 
-Template.game_row.helpers({
-  
-});
-
 Template.rankings.helpers({
   players: function() {
     return Players.find({$or: [{ wins: {$gt: 0}}, {losses: {$gt: 0}}]}, {sort: {rating: -1}});
@@ -159,12 +155,42 @@ Template.player_games.helpers({
   matches: function() {
     return Matches.find({$or: [{ ro_id: this._id}, {bo_id: this._id}]}, {sort: {date_time: -1}, limit: 10});
   }
-})
+});
 
 Template.player_game_row.helpers({
   isPlayer: function(player, currentId) {
-    console.log(player._id);
-    console.log(currentId);
     return player._id==currentId;
+  }
+});
+
+Template.player_opponents.helpers({
+  getOpponents: function(playerId) {
+    console.log(playerId);
+    var playerCounts = {};
+    var matches = Matches.find({$or: [{ ro_id: playerId}, {bo_id: playerId}]}, {});
+    var players = Players.find({});
+    players.forEach(function(player) {
+      if(playerId!=player._id) {
+        playerCounts[player._id] = 0;  
+      }
+    });
+    
+    matches.forEach(function(match){
+      if (match.ro_id == playerId) {
+        playerCounts[match.bo_id]++;
+      } else {
+        playerCounts[match.ro_id]++;
+      }
+    });
+    
+    var opponents = [];
+    for (var key in playerCounts) {
+      opponents.push({playerId: key, count: playerCounts[key]});
+    }
+    
+    return opponents.sort(function(obj1, obj2) {
+      // Ascending: first age less than the previous
+      return obj2.count - obj1.count;
+    });
   }
 })
