@@ -49,16 +49,13 @@ UI.registerHelper('formatDate', function(context, options) {
   }
 });
 
-UI.registerHelper('winPercentage', function(context, options){
-  if(context) {
-    var totalGames;
-    var user = Players.findOne({_id: context});
-    totalGames = user.wins+user.losses;
-    if(totalGames===0) {
-      return "---"
-    } else {
-      return Math.round(user.wins/totalGames*100);
-    }
+UI.registerHelper('winPercentage', function(wins, losses){
+  var totalGames;
+  totalGames = wins+losses;
+  if(totalGames===0) {
+    return "---"
+  } else {
+    return Math.round(wins/totalGames*100);
   }
 });
   
@@ -165,32 +162,60 @@ Template.player_game_row.helpers({
 
 Template.player_opponents.helpers({
   getOpponents: function(playerId) {
-    console.log(playerId);
     var playerCounts = {};
     var matches = Matches.find({$or: [{ ro_id: playerId}, {bo_id: playerId}]}, {});
     var players = Players.find({});
+    
+    // Initialize data
     players.forEach(function(player) {
       if(playerId!=player._id) {
-        playerCounts[player._id] = 0;  
+        playerCounts[player._id] = {
+          games: 0, 
+          wins: 0, 
+          losses: 0
+        };  
       }
     });
     
+    // Get data for each match
     matches.forEach(function(match){
       if (match.ro_id == playerId) {
-        playerCounts[match.bo_id]++;
+        // Current player is red
+        playerCounts[match.bo_id].games++;
+        if(match.rs>match.bs) {
+          // if red (current player) won
+          playerCounts[match.bo_id].wins++;
+        } else {
+          // if blue (opponent) won
+          playerCounts[match.bo_id].losses++;
+        }
       } else {
-        playerCounts[match.ro_id]++;
+        // current player is blue
+        playerCounts[match.ro_id].games++;
+        if(match.bs>match.bs) {
+          // if red (current player) won
+          playerCounts[match.ro_id].wins++;
+        } else {
+          // if blue (opponent) won
+          playerCounts[match.ro_id].losses++;
+        }
       }
     });
     
+    // build opponent data array for template
     var opponents = [];
     for (var key in playerCounts) {
-      opponents.push({playerId: key, count: playerCounts[key]});
+      opponents.push({
+        playerId: key, 
+        count: playerCounts[key].games,
+        wins: playerCounts[key].wins,
+        losses: playerCounts[key].losses
+      });
     }
     
+    // Sort opponents from most-played to least
     return opponents.sort(function(obj1, obj2) {
-      // Ascending: first age less than the previous
       return obj2.count - obj1.count;
     });
   }
-})
+});

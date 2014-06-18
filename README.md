@@ -34,16 +34,16 @@ Stage 1
 
 Additional player page info:
 - [x] list of player's recent games
-- [ ] 3 most-played opponents and record against them
-- [ ] 3 least-played opponents and record against them
+- [x] opponents list and record against each
 
 General Improvements
-- [ ] admin system to edit/ delete games + players.
+- [ ] icons (font awesome?)
 - [ ] game/ player list pagination
+- [ ] admin system to edit/ delete games + players.
 - [ ] fixture data for dev envrironment
 - [ ] mobile support
 - [ ] unit tests
-- [ ] Player comparison matrix
+- [ ] Player comparison matrix?
 
 Playing Session Management
 - [ ] Start a session

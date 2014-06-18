@@ -5,6 +5,7 @@
       <tr>
         <th>Opponent</th>
         <th>Game Count</th>
+        <th>Record Against</th>
       </tr>
     </thead>
     <tbody>
@@ -12,6 +13,7 @@
       <tr>
         <td>{{findPlayerFromId playerId}}</td>
         <td>{{count}}</td>
+        <td>{{wins}}-{{losses}} ({{winPercentage wins losses}}%)</td>
       </tr>
       {{/each}}
     </tbody>

@@ -1,7 +1,7 @@
 <template name="player_page">
   <h1>{{name}}</h1>
   <p><b>Rating: </b>{{roundRating rating}}</p>
-  <p><b>Record: </b>{{wins}} / {{losses}} ({{winPercentage _id}}%)</p>
+  <p><b>Record: </b>{{wins}}-{{losses}} ({{winPercentage wins losses}}%)</p>
   <div class="row">
     <div class="col-sm-6">
       {{> player_opponents currentPlayer=this._id}}
