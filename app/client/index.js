@@ -192,7 +192,7 @@ Template.player_opponents.helpers({
       } else {
         // current player is blue
         playerCounts[match.ro_id].games++;
-        if(match.bs>match.bs) {
+        if(match.bs>match.rs) {
           // if red (current player) won
           playerCounts[match.ro_id].wins++;
         } else {
