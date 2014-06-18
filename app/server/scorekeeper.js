@@ -36,7 +36,7 @@ var updateRating = function(rating, opponent_rating, win) {
   return Rn;
 };
 
-var updateAllRatings = function(doc, date) {
+var updateAllRatings = function(doc) {
   var red_won;
   var newRating1, newRating2, newWins1, newWins2, newLosses1, newLosses2;
   if (parseInt(doc.rs) > parseInt(doc.bs)) {
@@ -82,73 +82,77 @@ var updateAllRatings = function(doc, date) {
   });
 };
 
-Meteor.startup(function() {
-  /*
-  if (Meteor.settings.recalculate_ratings === 'true') {
-    console.log('recalculating ratings');
-
-    SinglesRatings.remove({});
-
-    var INITIAL_RATING = 1250;
-    var players = Players.find({}, {sort: {date_time: 1}});
-    players.forEach(function(player) {
-      // add an initial rating for each rating being tracked
-      SinglesRatings.insert({
-        date_time: player.date_time,
-        player_id: player._id,
-        rating: INITIAL_RATING
-      });
-    });
-
-    var matches = Matches.find({}, {sort: {date_time: 1}});
-    matches.forEach(function(match) {
-      var doc = ({
-        ro: getPlayerName(match.ro_id),
-        bo: getPlayerName(match.bo_id),
-        rs: match.rs,
-        bs: match.bs
-      });
-      updateAllRatings(doc, match.date_time);
-    });
-  }
-  */
-  
-  var addPlayer = function(player_name) {
-    id = Players.insert({
-      date_time: Date.now(),
-      name: player_name,
-      rating: 1200,
-      wins: 0,
-      losses: 0
-    });
-
-    return id;
-  };
-  
-  var insertMatch = function(doc) {
-    Matches.insert({
-      date_time: Date.now(),
-      ro_id: doc.ro,
-      bo_id: doc.bo,
-      rs: doc.rs,
-      bs: doc.bs
-    });
-  };
-  
-  Meteor.methods({
-    add_match: function(doc) {
-      // check the form against the schema
-      check(doc, MatchFormSchema);
-
-      // after the form has been checked, insert the Match into the collection
-      insertMatch(doc);
-
-      // update all ratings
-      updateAllRatings(doc, Date.now());
-    },
-    add_player: function(doc) {
-      check(doc, PlayerFormSchema);
-      addPlayer(doc.player_name, doc.rating);
-    }
+var addPlayer = function(player_name) {
+  id = Players.insert({
+    date_time: Date.now(),
+    name: player_name,
+    rating: 1200,
+    wins: 0,
+    losses: 0
   });
+
+  return id;
+};
+
+var insertMatch = function(doc) {
+  Matches.insert({
+    date_time: Date.now(),
+    ro_id: doc.ro,
+    bo_id: doc.bo,
+    rs: doc.rs,
+    bs: doc.bs
+  });
+};
+
+var recalc = function() {
+  console.log('recalculating ratings');
+
+  var INITIAL_RATING = 1200;
+  var players = Players.find({}, {sort: {date_time: 1}});
+  players.forEach(function(player) {
+    // add an initial rating for each rating being tracked
+    Players.update(player._id,{
+      $set : {
+        'rating':INITIAL_RATING,
+        'wins': 0,
+        'losses': 0
+      }
+    });
+  });
+
+  var matches = Matches.find({}, {sort: {date_time: 1}});
+  matches.forEach(function(match) {
+    var doc = ({
+      ro: match.ro_id,
+      bo: match.bo_id,
+      rs: match.rs,
+      bs: match.bs
+    });
+    updateAllRatings(doc);
+  });
+}
+
+Meteor.methods({
+  add_match: function(doc) {
+    // check the form against the schema
+    check(doc, MatchFormSchema);
+
+    // after the form has been checked, insert the Match into the collection
+    insertMatch(doc);
+
+    // update all ratings
+    updateAllRatings(doc);
+  },
+  add_player: function(doc) {
+    check(doc, PlayerFormSchema);
+    addPlayer(doc.player_name);
+  }
+});
+
+Meteor.startup(function() {
+  if (Meteor.settings.recalculate_ratings === 'true') {
+    if(Players.find().count()>0 && Matches.find().count()>0) {
+      recalc();
+    }
+  }
 });

@@ -69,7 +69,8 @@ Router.map(function() {
   this.route('player_page', {
     path: '/players/:_id',
     waitOn: function() {
-      return [Meteor.subscribe('players')];
+      return [Meteor.subscribe('players'),
+              Meteor.subscribe('matches')];
     },
     data: function() { 
       return Players.findOne(this.params._id);
