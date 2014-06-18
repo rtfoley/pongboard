@@ -1,0 +1,40 @@
+<template name="player_games">
+  <div class="container-fluid">
+    <div class="row">
+      <h2 align="center">Recent Games</h2>
+      <table class="table table-hover table-striped" id="games_table">
+        <thead>
+          <tr>
+            <th>Date/Time</th>
+            <th>Opponent</th>
+            <th>Result</th>
+            <th>{{this.name}}'s Score</th>
+            <th>Opponent's Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each matches}}
+            {{> player_game_row}}
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+<template name="player_game_row">
+  <tr>
+    <td>{{formatDate date_time}}</td>
+    {{#if isPlayer .. ro_id}}
+      <td>{{findPlayerFromId bo_id}}</td>
+      <td>{{getResult rs bs}}</td>
+      <td>{{rs}}</td>
+      <td>{{bs}}</td>
+    {{else}}
+      <td>{{findPlayerFromId ro_id}}</td>
+      <td>{{getResult bs rs}}</td>
+      <td>{{bs}}</td>
+      <td>{{rs}}</td>
+    {{/if}}
+  </tr>
+</template>

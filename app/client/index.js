@@ -68,6 +68,28 @@ UI.registerHelper('roundRating', function(context, options) {
   }
 });
 
+UI.registerHelper('findPlayerFromId', function(context, options){
+  if(context) {
+    return Players.findOne({_id: context}).name;
+  }
+});
+
+UI.registerHelper('getResultClass', function(thisScore, theirScore) {
+  if(thisScore > theirScore) {
+    return "winner";
+  } else {
+    return "loser";
+  }
+});
+
+UI.registerHelper('getResult', function(thisScore, theirScore) {
+  if(thisScore > theirScore) {
+    return "W";
+  } else {
+    return "L";
+  }
+});
+
 Template.game_form.helpers({
   matchForm: function() {
     return MatchFormSchema;
@@ -106,17 +128,7 @@ Template.recent_games.helpers({
 });
 
 Template.game_row.helpers({
-  findPlayerFromId: function(id) {
-    return Players.findOne({_id: id}).name;
-  },
   
-  getResultClass: function(thisScore, theirScore) {
-    if(thisScore > theirScore) {
-      return "winner";
-    } else {
-      return "loser";
-    }
-  }
 });
 
 Template.rankings.helpers({
@@ -142,3 +154,17 @@ Template.player_form.helpers({
     return PlayerFormSchema;
   }
 });
+
+Template.player_games.helpers({
+  matches: function() {
+    return Matches.find({$or: [{ ro_id: this._id}, {bo_id: this._id}]}, {sort: {date_time: -1}, limit: 10});
+  }
+})
+
+Template.player_game_row.helpers({
+  isPlayer: function(player, currentId) {
+    console.log(player._id);
+    console.log(currentId);
+    return player._id==currentId;
+  }
+})

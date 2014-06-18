@@ -33,7 +33,7 @@ Stage 1
 - [x] player name is link to page about that player
 
 Additional player page info:
-- [ ] list of player's recent games
+- [x] list of player's recent games
 - [ ] 3 most-played opponents and record against them
 - [ ] 3 least-played opponents and record against them
 
