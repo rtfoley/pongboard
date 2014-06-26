@@ -36,12 +36,15 @@ Additional player page info:
 - [x] list of player's recent games
 - [x] opponents list and record against each
 
-General Improvements
+UI Facelift
+- [ ] display rank for each player on their page, and in the player tables
 - [ ] icons (font awesome?)
 - [ ] game/ player list pagination
+- [ ] mobile support
+
+General Improvements
 - [ ] admin system to edit/ delete games + players.
 - [ ] fixture data for dev envrironment
-- [ ] mobile support
 - [ ] unit tests
 - [ ] Player comparison matrix?
 
