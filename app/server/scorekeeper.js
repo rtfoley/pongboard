@@ -150,9 +150,7 @@ Meteor.methods({
 });
 
 Meteor.startup(function() {
-  if (Meteor.settings.recalculate_ratings === 'true') {
-    if(Players.find().count()>0 && Matches.find().count()>0) {
-      recalc();
-    }
+  if(Players.find().count()>0 && Matches.find().count()>0) {
+    recalc();
   }
 });
