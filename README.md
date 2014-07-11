@@ -39,7 +39,6 @@ Additional player page info:
 UI Facelift
 - [x] display rank for each player on their page, and in the player tables
 - [x] icons (font awesome?)
-- [ ] mobile support
 
 General Improvements
 - [ ] admin system to edit/ delete games + players.
