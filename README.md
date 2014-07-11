@@ -37,9 +37,8 @@ Additional player page info:
 - [x] opponents list and record against each
 
 UI Facelift
-- [ ] display rank for each player on their page, and in the player tables
-- [ ] icons (font awesome?)
-- [ ] game/ player list pagination
+- [x] display rank for each player on their page, and in the player tables
+- [x] icons (font awesome?)
 - [ ] mobile support
 
 General Improvements

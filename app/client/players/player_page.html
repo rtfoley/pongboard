@@ -1,7 +1,8 @@
 <template name="player_page">
-  <h1>{{name}}</h1>
-  <p><i class="fa fa-trophy fa-fw fa-lg"></i><b>Rating: </b>{{roundRating rating}}</p>
-  <p><i class="fa fa-tachometer fa-fw fa-lg"></i><b>Record: </b>{{wins}}-{{losses}} ({{winPercentage wins losses}}%)</p>
+  <h1><b>{{name}}</b></h1>
+  <p><b>Rank: </b>{{getRank this._id}}</p>
+  <p><b>Rating: </b>{{roundRating rating}}</p>
+  <p><b>Record: </b>{{wins}}-{{losses}} ({{winPercentage wins losses}}%)</p>
   <div class="row">
     <div class="col-sm-6">
       {{> player_opponents currentPlayer=this._id}}
