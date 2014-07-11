@@ -87,6 +87,19 @@ UI.registerHelper('getResult', function(thisScore, theirScore) {
   }
 });
 
+UI.registerHelper('getRank', function(playerId) {
+  var players = Players.find({}, {sort: {rating: -1}}).fetch();
+  
+  // TODO could this use an indexOf somehow, instead of a for loop?
+  for (var i=0; i< players.length; i++) {
+    if(playerId == players[i]._id) {
+      return i+1;
+    }
+  }
+  
+  return 0;
+})
+
 Template.game_form.helpers({
   matchForm: function() {
     return MatchFormSchema;

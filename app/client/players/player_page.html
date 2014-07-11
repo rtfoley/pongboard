@@ -1,5 +1,6 @@
 <template name="player_page">
-  <h1>{{name}}</h1>
+  <h1><b>{{name}}</b></h1>
+  <p><b>Rank: </b>{{getRank this._id}}</p>
   <p><b>Rating: </b>{{roundRating rating}}</p>
   <p><b>Record: </b>{{wins}}-{{losses}} ({{winPercentage wins losses}}%)</p>
   <div class="row">

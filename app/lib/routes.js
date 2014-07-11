@@ -1,41 +1,30 @@
-// something is not working anymore with respect to the loadingTemplate
-// and the waitOn hook, there is a lot of discussion about this here:
-// https://github.com/EventedMind/iron-router/issues/265
-// functionality changed after Meteor 0.8/iron-router 0.7
-// waitOn should not go in the global configure since you shouldn't wait
-// on all of the subscriptions for every route, but it is here for now
-// to try to figure out what is going on
+// global router configuration
 Router.configure({
   layoutTemplate: 'layout',
   loadingTemplate: 'loading',
   notFoundTemplate: 'notFound',
-  waitOn: function() {
-    return [Meteor.subscribe('players'),
-            Meteor.subscribe('matches')];
-  }
 });
 
-// in the post above, it was suggested to call if(this.ready()) in the data
-// hook to actually get the loadingTemplate to work, so this is being done
-// for the home route below
 Router.map(function() {
+  // Home
   this.route('home', {
     path: '/',
-    layoutTemplate: 'layout',
     waitOn: function() {
       return [Meteor.subscribe('players'),
-              Meteor.subscribe('matches')];
+              Meteor.subscribe('matches', {sort: {date_time: -1}, limit: 10})];
     }
   });
 
+  // Add Game
   this.route('add_game', {
     path: '/add_game',
     waitOn: function() {
       return [Meteor.subscribe('players'),
-              Meteor.subscribe('matches')];
+              Meteor.subscribe('matches', {sort: {date_time: -1}, limit: 10})];
     }
   });
   
+  // Add Player
   this.route('add_player', {
     path: '/add_player',
     waitOn: function() {
@@ -43,6 +32,7 @@ Router.map(function() {
     }
   });
 
+  // Rankings
   this.route('rankings', {
     path: '/rankings',
     waitOn: function() {
@@ -51,6 +41,7 @@ Router.map(function() {
     }
   });
   
+  // Game List
   this.route('game_list', {
     path: '/game_list',
     waitOn: function() {
@@ -59,6 +50,7 @@ Router.map(function() {
     }
   });
   
+  // Player List
   this.route('player_list', {
     path: '/players',
     waitOn: function() {
@@ -66,6 +58,7 @@ Router.map(function() {
     }
   });
   
+  // Individual Player Page
   this.route('player_page', {
     path: '/players/:_id',
     waitOn: function() {
@@ -77,15 +70,15 @@ Router.map(function() {
     }
   });
 
+  // About
   this.route('about', {
     path: '/about'
   });
 
-  // route with name 'notFound' that for example matches
-  // '/non-sense/route/that-matches/nothing' and automatically renders
-  // template 'notFound'
-  // HINT: Define a global not found route as the very last route in your router
+  // Not-found Page
   this.route('notFound', {
     path: '*'
   });
 });
+
+Router.onBeforeAction('loading');
