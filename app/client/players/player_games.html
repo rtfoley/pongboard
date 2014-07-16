@@ -26,12 +26,12 @@
   <tr>
     <td>{{formatDate date_time}}</td>
     {{#if isPlayer .. ro_id}}
-      <td>{{findPlayerFromId bo_id}}</td>
+      <td><a href="{{pathFor 'player_page' _id=bo_id}}">{{findPlayerFromId bo_id}}</a></td>
       <td>{{getResult rs bs}}</td>
       <td>{{rs}}</td>
       <td>{{bs}}</td>
     {{else}}
-      <td>{{findPlayerFromId ro_id}}</td>
+      <td><a href="{{pathFor 'player_page' _id=ro_id}}">{{findPlayerFromId ro_id}}</a></td>
       <td>{{getResult bs rs}}</td>
       <td>{{bs}}</td>
       <td>{{rs}}</td>

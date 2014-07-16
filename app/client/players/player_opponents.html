@@ -11,7 +11,7 @@
     <tbody>
       {{#each getOpponents this.currentPlayer}}
       <tr>
-        <td>{{findPlayerFromId playerId}}</td>
+        <td><a href="{{pathFor 'player_page' _id=playerId}}">{{findPlayerFromId playerId}}</a></td>
         <td>{{count}}</td>
         <td>{{wins}}-{{losses}} ({{winPercentage wins losses}}%)</td>
       </tr>

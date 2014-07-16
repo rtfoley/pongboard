@@ -41,8 +41,12 @@ UI Facelift
 - [x] icons (font awesome?)
 
 General Improvements
+- [ ] ability to sort by column on player page table
+- [ ] ability to filter game page (by players, scores)
+- [ ] quick-link to all of a player's games on their page
+- [x] all player names should be links
+- [ ] use the 'elo' npm package for rating calculations
 - [ ] admin system to edit/ delete games + players.
-- [ ] fixture data for dev envrironment
 - [ ] unit tests
 - [ ] Player comparison matrix?
 

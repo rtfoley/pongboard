@@ -18,9 +18,9 @@
 <template name="game_row">
   <tr>
     <td>{{formatDate date_time}}</td>
-    <td class="{{getResultClass rs bs}}">{{findPlayerFromId ro_id}}</td>
+    <td class="{{getResultClass rs bs}}"><a href="{{pathFor 'player_page' _id=ro_id}}">{{findPlayerFromId ro_id}}</a></td>
     <td class="{{getResultClass rs bs}}">{{rs}}</td>
-    <td class="{{getResultClass bs rs}}">{{findPlayerFromId bo_id}}</td>
+    <td class="{{getResultClass bs rs}}"><a href="{{pathFor 'player_page' _id=bo_id}}">{{findPlayerFromId bo_id}}</a></td>
     <td class="{{getResultClass bs rs}}">{{bs}}</td>
   </tr>
 </template>
