@@ -2,6 +2,20 @@ Meteor.publish('matches', function() {
   return Matches.find();
 });
 
+Matches.allow({
+  insert: function(userId, doc) {
+    updateAllRatings(doc);
+    return true;
+  },
+  update: function() {
+    return true;
+  },
+  remove: function() {
+    return true;
+  },
+  fetch: []
+});
+
 Meteor.publish('players', function() {
   var fields = {
     _id:1,
@@ -59,8 +73,8 @@ var updateAllRatings = function(doc) {
     red_won = false;
   }
   
-  var user1 = Players.findOne({"_id": doc.ro});
-  var user2 = Players.findOne({"_id": doc.bo});
+  var user1 = Players.findOne({"_id": doc.ro_id});
+  var user2 = Players.findOne({"_id": doc.bo_id});
   
   // Calculate new ratings
   newRating1 = updateRating(user1.rating, user2.rating, red_won);
@@ -96,28 +110,6 @@ var updateAllRatings = function(doc) {
   });
 };
 
-var addPlayer = function(player_name) {
-  id = Players.insert({
-    date_time: Date.now(),
-    name: player_name,
-    rating: 1200,
-    wins: 0,
-    losses: 0
-  });
-
-  return id;
-};
-
-var insertMatch = function(doc) {
-  Matches.insert({
-    date_time: Date.now(),
-    ro_id: doc.ro,
-    bo_id: doc.bo,
-    rs: doc.rs,
-    bs: doc.bs
-  });
-};
-
 var recalc = function() {
   console.log('recalculating ratings');
 
@@ -137,8 +129,8 @@ var recalc = function() {
   var matches = Matches.find({}, {sort: {date_time: 1}});
   matches.forEach(function(match) {
     var doc = ({
-      ro: match.ro_id,
-      bo: match.bo_id,
+      ro_id: match.ro_id,
+      bo_id: match.bo_id,
       rs: match.rs,
       bs: match.bs
     });
@@ -147,20 +139,7 @@ var recalc = function() {
 }
 
 Meteor.methods({
-  add_match: function(doc) {
-    // check the form against the schema
-    check(doc, MatchFormSchema);
-
-    // after the form has been checked, insert the Match into the collection
-    insertMatch(doc);
-
-    // update all ratings
-    updateAllRatings(doc);
-  },
-  add_player: function(doc) {
-    check(doc, PlayerFormSchema);
-    addPlayer(doc.player_name);
-  }
+  
 });
 
 Meteor.startup(function() {

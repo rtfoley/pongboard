@@ -102,10 +102,6 @@ UI.registerHelper('getRank', function(playerId) {
 })
 
 Template.game_form.helpers({
-  matchForm: function() {
-    return MatchFormSchema;
-  },
-  
   players: function() {
     var p = [];
     var uTemp = Players.find({}, {sort: {name: 1}});
@@ -231,13 +227,22 @@ Template.player_opponents.helpers({
 // Form hooks
 AutoForm.hooks({
   insertPlayerForm: {
-    // add total score
+    // add timestamp, and initial values for rating, wins, and losses.
     before: {
       insert: function(doc, template) {
         doc.date_time = Date.now();
         doc.rating = 1200;
         doc.wins = 0;
         doc.losses = 0;
+        return doc;
+      }
+    },
+  },
+  insertGameForm: {
+    // add timestamp to match
+    before: {
+      insert: function(doc, template) {
+        doc.date_time = Date.now();
         return doc;
       }
     },

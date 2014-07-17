@@ -1,46 +1,47 @@
 // using autoform, simple-schema, and Collections2 packages to validate inserts
 // against schema to ensure data integrity
-Matches = new Meteor.Collection('matches');
-
-// here we are creating a SimpleSchema because date_time is in the Collection,
-// but not in the form
-MatchFormSchema = new SimpleSchema({
-  ro: {
-    type: String,
-    label: 'Player 1*',
-    custom: function () {
-      if (this.value == this.field('bo').value) {
-        return "samePlayer";
+Matches = new Meteor.Collection('matches', {
+  schema: {
+    date_time: {
+      type: Number
+    },
+    ro_id: {
+      type: String,
+      label: 'Player 1*',
+      custom: function () {
+        if (this.value == this.field('bo_id').value) {
+          return "samePlayer";
+        }
       }
-    }
-  },
-  bo: {
-    type: String,
-    label: 'Player 2*',
-    custom: function () {
-      if (this.value == this.field('ro').value) {
-        return "samePlayer";
+    },
+    bo_id: {
+      type: String,
+      label: 'Player 2*',
+      custom: function () {
+        if (this.value == this.field('ro_id').value) {
+          return "samePlayer";
+        }
       }
-    }
-  },
-  rs: {
-    type: Number,
-    label: 'Player 1 Score*',
-    min: 0,
-    custom: function() {
-      var thisScore = this.value;
-      var theirScore = this.field('bs').value;
-      return checkScore(thisScore, theirScore);
-    }
-  },
-  bs: {
-    type: Number,
-    label: 'Player 2 Score*',
-    min: 0,
-    custom: function() {
-      var thisScore = this.value;
-      var theirScore = this.field('rs').value;
-      return checkScore(thisScore, theirScore);
+    },
+    rs: {
+      type: Number,
+      label: 'Player 1 Score*',
+      min: 0,
+      custom: function() {
+        var thisScore = this.value;
+        var theirScore = this.field('bs').value;
+        return checkScore(thisScore, theirScore);
+      }
+    },
+    bs: {
+      type: Number,
+      label: 'Player 2 Score*',
+      min: 0,
+      custom: function() {
+        var thisScore = this.value;
+        var theirScore = this.field('rs').value;
+        return checkScore(thisScore, theirScore);
+      }
     }
   }
 });
@@ -78,7 +79,7 @@ Players = new Meteor.Collection('players', {
   }
 });
 
-MatchFormSchema.messages({
+Matches.simpleSchema().messages({
   "samePlayer": "Players can not be the same",
   "winBy2": "Winner must win by at least 2 points",
   "sameScore": "Game cannot end in a tie",
