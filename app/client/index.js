@@ -4,6 +4,7 @@ Accounts.ui.config({
 
 Deps.autorun(function(){
   Meteor.subscribe('players');
+  Meteor.subscribe('matches');
 });
 
 /** options for the spinner package */
@@ -155,12 +156,6 @@ Template.new_players.helpers({
   }
 });
 
-Template.player_form.helpers({
-  playerForm: function() {
-    return PlayerFormSchema;
-  }
-});
-
 Template.player_games.helpers({
   matches: function() {
     return Matches.find({$or: [{ ro_id: this._id}, {bo_id: this._id}]}, {sort: {date_time: -1}, limit: 10});
@@ -230,5 +225,40 @@ Template.player_opponents.helpers({
     return opponents.sort(function(obj1, obj2) {
       return obj2.count - obj1.count;
     });
+  }
+});
+
+// Form hooks
+AutoForm.hooks({
+  insertPlayerForm: {
+    // add total score
+    before: {
+      insert: function(doc, template) {
+        doc.date_time = Date.now();
+        doc.rating = 1200;
+        doc.wins = 0;
+        doc.losses = 0;
+        return doc;
+      }
+    },
+  }
+});
+
+// debugging only
+AutoForm.addHooks(null, {
+  after: {
+    insert: function(error, result) {
+      if (error) {
+        console.log("Insert Error:", error);
+      }
+    },
+    update: function(error) {
+      if (error) {
+        console.log("Update Error:", error);
+      }
+    },
+    remove: function(error) {
+      console.log("Remove Error:", error);
+    }
   }
 });

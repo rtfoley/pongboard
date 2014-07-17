@@ -14,6 +14,20 @@ Meteor.publish('players', function() {
   return Players.find({}, {fields: fields});
 });
 
+Players.allow({
+  insert: function() {
+    return true;
+  },
+  update: function() {
+    return true;
+  },
+  remove: function() {
+    return true;
+  },
+  fetch: []
+});
+
+
 // define some constants for Elo Ratings
 // we are using the Bonzini USA values:
 //   http://www.bonziniusa.com/foosball/tournament/TournamentRankingSystem.html
@@ -33,7 +47,7 @@ var updateRating = function(rating, opponent_rating, win) {
   var We = winExpectancy(rating, opponent_rating);
   var Rn = rating + (K_RATING_COEFFICIENT * (S - We));
   
-  return Rn;
+  return Math.round(Rn);
 };
 
 var updateAllRatings = function(doc) {

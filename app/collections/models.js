@@ -1,7 +1,6 @@
 // using autoform, simple-schema, and Collections2 packages to validate inserts
 // against schema to ensure data integrity
 Matches = new Meteor.Collection('matches');
-Players = new Meteor.Collection('players');
 
 // here we are creating a SimpleSchema because date_time is in the Collection,
 // but not in the form
@@ -46,18 +45,35 @@ MatchFormSchema = new SimpleSchema({
   }
 });
 
-PlayerFormSchema = new SimpleSchema({
-  player_name: {
-    type: String,
-    label: 'Name*',
-    min: 2,
-    custom: function() {
-      var id = Players.findOne({name: this.value});
-      if (id) {
-        // player already in database, no need to add again
-        console.log('id already exists: ' + id._id);
-        return "alreadyExists";
+Players = new Meteor.Collection('players', {
+  schema: {
+    name: {
+      type: String,
+      label: 'Name*',
+      min: 2,
+      custom: function() {
+        var id = Players.findOne({name: this.value});
+        if (id) {
+          // player already in database, no need to add again
+          console.log('id already exists: ' + id._id);
+          return "alreadyExists";
+        }
       }
+    },
+    date_time: {
+      type: Number
+    },
+    rating: {
+      type: Number,
+      min: 0
+    },
+    wins: {
+      type: Number,
+      min: 0
+    },
+    losses: {
+      type: Number,
+      min: 0
     }
   }
 });
@@ -70,7 +86,7 @@ MatchFormSchema.messages({
   "illegalOvertime": "Winner can't win by more than 2 points if opponent has at least 10 points"
 });
 
-PlayerFormSchema.messages({
+Players.simpleSchema().messages({
   "alreadyExists": "Player already exists"
 });
 
