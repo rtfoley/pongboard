@@ -146,4 +146,11 @@ Meteor.startup(function() {
   if(Players.find().count()>0 && Matches.find().count()>0) {
     recalc();
   }
+  if(Meteor.users.find().count()===0)
+    {
+      Accounts.createUser({
+        username: "admin",
+        password: "changeme"
+      });
+    }
 });

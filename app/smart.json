@@ -13,7 +13,6 @@
     "spin": {},
     "jqueryui": {},
     "nvd3js": {},
-    "accounts-ui-bootstrap-3": {},
-    "houston": {}
+    "accounts-ui-bootstrap-3": {}
   }
 }
