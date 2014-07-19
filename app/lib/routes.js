@@ -18,6 +18,23 @@ Router.map(function() {
   // Add Game
   this.route('add_game', {
     path: '/add_game',
+    data: {
+      formType: "insert",
+      game: null
+    },
+    waitOn: function() {
+      return [Meteor.subscribe('players'),
+              Meteor.subscribe('matches', {sort: {date_time: -1}, limit: 10})];
+    }
+  });
+  
+  // Edit game
+  this.route('edit_game', {
+    path: '/edit_game/:_id',
+    data: function(){
+      match = Matches.findOne(this.params._id);
+      return { formType: "update", game: match};
+    },
     waitOn: function() {
       return [Meteor.subscribe('players'),
               Meteor.subscribe('matches', {sort: {date_time: -1}, limit: 10})];

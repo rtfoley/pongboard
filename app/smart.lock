@@ -15,7 +15,8 @@
       "spin": {},
       "jqueryui": {},
       "nvd3js": {},
-      "accounts-ui-bootstrap-3": {}
+      "accounts-ui-bootstrap-3": {},
+      "collection-hooks": {}
     },
     "packages": {
       "npm": {
@@ -72,6 +73,11 @@
         "git": "https://github.com/mangasocial/meteor-accounts-ui-bootstrap-3.git",
         "tag": "v0.3.3",
         "commit": "2e50b605d8d5ed68e48c4529a65f13552d8af3f9"
+      },
+      "collection-hooks": {
+        "git": "https://github.com/matb33/meteor-collection-hooks.git",
+        "tag": "v0.7.2",
+        "commit": "261f61f07b371ae913463fba8964a9b93cab531b"
       },
       "moment": {
         "git": "https://github.com/acreeger/meteor-moment.git",

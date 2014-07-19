@@ -242,7 +242,7 @@ AutoForm.hooks({
       }
     },
   },
-  insertGameForm: {
+  gameForm: {
     // add timestamp to match
     before: {
       insert: function(doc, template) {
@@ -250,6 +250,12 @@ AutoForm.hooks({
         return doc;
       }
     },
+    onSuccess: function(operation, result, template) {
+      if(operation=="update") {
+        AutoForm.resetForm(gameForm)
+        history.back();
+      }
+    }
   }
 });
 

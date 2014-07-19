@@ -7,6 +7,9 @@
         <th>Score</th>
         <th>Player 2</th>
         <th>Score</th>
+        {{#if currentUser}}
+          <th>Admin</th>
+        {{/if}}
       </tr>
     </thead>
     <tbody>
@@ -22,5 +25,8 @@
     <td class="{{getResultClass rs bs}}">{{rs}}</td>
     <td class="{{getResultClass bs rs}}"><a href="{{pathFor 'player_page' _id=bo_id}}">{{findPlayerFromId bo_id}}</a></td>
     <td class="{{getResultClass bs rs}}">{{bs}}</td>
+    {{#if currentUser}}
+    <td><a href="{{pathFor 'edit_game'}}">Edit</a></td>
+    {{/if}}
   </tr>
 </template>

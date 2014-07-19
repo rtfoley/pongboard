@@ -4,16 +4,23 @@ Meteor.publish('matches', function() {
 
 Matches.allow({
   insert: function(userId, doc) {
-    updateAllRatings(doc);
     return true;
   },
-  update: function() {
-    return true;
+  update: function(userId, doc, fieldNames, modifier) {
+    return !! userId;
   },
-  remove: function() {
-    return true;
+  remove: function(userId, doc) {
+    return !! userId;
   },
   fetch: []
+});
+
+Matches.after.insert(function (userId, doc) {
+  updateAllRatings(doc);
+});
+
+Matches.after.update(function (userId, doc, fieldNames, modifier, options) {
+  recalc();
 });
 
 Meteor.publish('players', function() {
@@ -33,10 +40,10 @@ Players.allow({
     return true;
   },
   update: function() {
-    return true;
+    return !! userId;
   },
   remove: function() {
-    return true;
+    return !! userId;
   },
   fetch: []
 });
