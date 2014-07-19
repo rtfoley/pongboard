@@ -132,6 +132,16 @@ Template.game_list.helpers({
   }
 });
 
+Template.game_form.events = {
+  'click button.cancel': function () {
+    history.back();
+  },
+  'click button.delete': function () {
+    Matches.remove(this.game._id);
+    history.back();
+  }
+};
+
 Template.recent_games.helpers({
   matches: function() {
     return Matches.find({}, {sort: {date_time: -1}, limit: 10});

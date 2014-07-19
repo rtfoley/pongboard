@@ -26,7 +26,9 @@
     <td class="{{getResultClass bs rs}}"><a href="{{pathFor 'player_page' _id=bo_id}}">{{findPlayerFromId bo_id}}</a></td>
     <td class="{{getResultClass bs rs}}">{{bs}}</td>
     {{#if currentUser}}
-    <td><a href="{{pathFor 'edit_game'}}">Edit</a></td>
+    <td>
+      <a href="{{pathFor 'edit_game'}}">Edit</a>
+    </td>
     {{/if}}
   </tr>
 </template>
