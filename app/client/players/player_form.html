@@ -1,5 +1,5 @@
 <template name="player_form">
-  {{#autoForm collection="Players" id="insertPlayerForm" type="insert"}}
+  {{#autoForm collection="Players" id="playerForm" doc=player type=formType}}
     <fieldset>
       <div class="row">
         <div class="col-sm-6 col-sm-offset-3">
@@ -8,6 +8,9 @@
           </div>
           <div style="text-align:center">
             <button type="submit" class="btn btn-primary">Submit</button>
+            {{#if player}}
+            <button type="button" class="btn btn-warning cancel">Cancel</button>
+            {{/if}}
           </div>
         </div>
       </div>

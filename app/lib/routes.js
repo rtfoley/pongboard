@@ -44,6 +44,22 @@ Router.map(function() {
   // Add Player
   this.route('add_player', {
     path: '/add_player',
+    data: {
+      formType: "insert",
+      player: null
+    },
+    waitOn: function() {
+      return [Meteor.subscribe('players')];
+    }
+  });
+  
+  // Edit game
+  this.route('edit_player', {
+    path: '/edit_player/:_id',
+    data: function(){
+      p = Players.findOne(this.params._id);
+      return { formType: "update", player: p};
+    },
     waitOn: function() {
       return [Meteor.subscribe('players')];
     }

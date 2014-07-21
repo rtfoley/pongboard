@@ -161,6 +161,12 @@ Template.rankings.helpers({
   }
 });
 
+Template.player_form.events({
+  'click button.cancel': function () {
+    history.back();
+  },
+})
+
 Template.player_list.helpers({
   players: function() {
     return Players.find({}, {sort: {name: 1}});
@@ -247,7 +253,7 @@ Template.player_opponents.helpers({
 
 // Form hooks
 AutoForm.hooks({
-  insertPlayerForm: {
+  playerForm: {
     // add timestamp, and initial values for rating, wins, and losses.
     before: {
       insert: function(doc, template) {
@@ -258,6 +264,12 @@ AutoForm.hooks({
         return doc;
       }
     },
+    onSuccess: function(operation, result, template) {
+      if(operation=="update") {
+        AutoForm.resetForm(playerForm);
+        history.back();
+      }
+    }
   },
   gameForm: {
     // add timestamp to match
@@ -271,7 +283,6 @@ AutoForm.hooks({
       if(operation=="update") {
         AutoForm.resetForm(gameForm);
         history.back();
-        Session.set('recalculating', false);
       }
     }
   }

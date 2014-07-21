@@ -39,10 +39,7 @@ Players.allow({
   insert: function() {
     return true;
   },
-  update: function() {
-    return !! userId;
-  },
-  remove: function() {
+  update: function(userId, doc) {
     return !! userId;
   },
   fetch: []
