@@ -117,6 +117,9 @@ Template.game_form.helpers({
       p.push(ret);
     });
     return p;
+  },
+  loading: function() {
+    return Session.equals("recalculating", true) && this.formType=="update";
   }
 });
 
@@ -136,9 +139,13 @@ Template.game_form.events = {
   'click button.cancel': function () {
     history.back();
   },
+  
   'click button.delete': function () {
-    Matches.remove(this.game._id);
-    history.back();
+    Session.set("recalculating", true);
+    Meteor.call('deleteMatch', this.game._id, function(err, response) {
+      history.back();
+      Session.set("recalculating", false);
+    });
   }
 };
 
@@ -262,8 +269,9 @@ AutoForm.hooks({
     },
     onSuccess: function(operation, result, template) {
       if(operation=="update") {
-        AutoForm.resetForm(gameForm)
+        AutoForm.resetForm(gameForm);
         history.back();
+        Session.set('recalculating', false);
       }
     }
   }

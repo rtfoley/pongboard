@@ -23,10 +23,6 @@ Matches.after.update(function (userId, doc, fieldNames, modifier, options) {
   recalc();
 });
 
-Matches.after.remove(function (userId, doc) {
-  recalc();
-});
-
 Meteor.publish('players', function() {
   var fields = {
     _id:1,
@@ -150,7 +146,11 @@ var recalc = function() {
 }
 
 Meteor.methods({
-  
+  deleteMatch: function (id) {
+    Matches.remove(id);
+    recalc();
+    return true;
+  }
 });
 
 Meteor.startup(function() {

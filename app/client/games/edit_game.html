@@ -1,3 +1,7 @@
 <template name="edit_game">
-  {{> game_form}}
+  {{#if loading}}
+    {{> spinner}}        
+  {{else}}  
+    {{> game_form}}
+  {{/if}}
 </template>

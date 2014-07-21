@@ -14,14 +14,12 @@
                 {{> afQuickField name='ro_id' firstOption="Select a player" options=players}}
               </div>
             </div>
-
             <div class="col-sm-6">
               <div>
                 {{> afQuickField name='bo_id' firstOption="Select a player" options=players}}
               </div>
             </div>
           </div>
-
           <div class="row">
             <hr>
             <div class="col-sm-12" style="text-align:center">
@@ -36,16 +34,15 @@
             </div>
             <div class="col-sm-6">
               <div>
-                 {{> afQuickField name='bs' placeholder="0"}}
+                {{> afQuickField name='bs' placeholder="0"}}
               </div>
             </div>
-
             <div class="row">
               <div class="col-sm-12" style="text-align:center">
                 <button type="submit" class="btn btn-primary">Submit</button>
                 {{#if game}}
-                  <button type="button" class="btn btn-warning cancel">Cancel</button>
-                  <button type="button" class="btn btn-danger delete">Delete</button>
+                <button type="button" class="btn btn-warning cancel">Cancel</button>
+                <button type="button" class="btn btn-danger delete">Delete</button>
                 {{/if}}
               </div>
             </div>
