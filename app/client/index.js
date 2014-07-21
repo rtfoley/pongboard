@@ -118,8 +118,12 @@ Template.game_form.helpers({
     });
     return p;
   },
+  
+});
+
+Template.edit_game.helpers({
   loading: function() {
-    return Session.equals("recalculating", true) && this.formType=="update";
+    return Session.equals("recalculating", true);
   }
 });
 
