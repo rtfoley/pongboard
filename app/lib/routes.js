@@ -17,7 +17,7 @@ Router.map(function() {
 
   // Add Game
   this.route('add_game', {
-    path: '/add_game',
+    path: '/games/add',
     data: {
       formType: "insert",
       game: null
@@ -30,7 +30,7 @@ Router.map(function() {
   
   // Edit game
   this.route('edit_game', {
-    path: '/edit_game/:_id',
+    path: '/games/:_id/edit',
     data: function(){
       match = Matches.findOne(this.params._id);
       return { formType: "update", game: match};
@@ -43,7 +43,7 @@ Router.map(function() {
   
   // Add Player
   this.route('add_player', {
-    path: '/add_player',
+    path: '/players/add',
     data: {
       formType: "insert",
       player: null
@@ -55,7 +55,7 @@ Router.map(function() {
   
   // Edit game
   this.route('edit_player', {
-    path: '/edit_player/:_id',
+    path: '/players/:_id/edit',
     data: function(){
       p = Players.findOne(this.params._id);
       return { formType: "update", player: p};
@@ -76,7 +76,7 @@ Router.map(function() {
   
   // Game List
   this.route('game_list', {
-    path: '/game_list',
+    path: '/games',
     waitOn: function() {
       return [Meteor.subscribe('players'),
               Meteor.subscribe('matches')];
