@@ -20,15 +20,12 @@ Template.edit_game.helpers({
   }
 });
 
-Template.header.events({
-  'click #menu-toggle': function() {
-    $('#wrapper').toggleClass('active');
-  }
-});
-
 Template.game_list.helpers({
   matches: function() {
     return Matches.find({}, {sort: {date_time: -1}});
+  },
+  matchCount: function() {
+    return Matches.find({}).count();
   }
 });
 

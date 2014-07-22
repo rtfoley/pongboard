@@ -1,6 +1,7 @@
 <template name="player_list">
   <div class="container-fluid">
     <h2 align="center">Players</h2>
+    <h4>{{playerCount}} players</h4>
     {{#playerTableWrapper}}
       {{#each players}}
         {{> player_row}}

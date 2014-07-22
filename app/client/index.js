@@ -43,7 +43,6 @@ Meteor.Spinner.options = {
   left: 'auto'
 };
 
-// Replace this with Moment.js?
 UI.registerHelper('formatDate', function(context, options) {
   if(context) {
     return moment(context).format('MMMM Do YYYY, h:mm:ss a');

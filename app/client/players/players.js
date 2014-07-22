@@ -13,6 +13,9 @@ Template.player_form.events({
 Template.player_list.helpers({
   players: function() {
     return Players.find({}, {sort: {name: 1}});
+  },
+  playerCount: function() {
+    return Players.find({}).count();
   }
 });
 
