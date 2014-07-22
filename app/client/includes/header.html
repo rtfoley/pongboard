@@ -10,20 +10,16 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="{{pathFor 'home'}}">Pongboard</a>
+          {{> navBrand}}
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href="{{pathFor 'game_list'}}"><i class="fa fa-flag fa-fw fa-lg"></i>Games</a></li>
-            <li><a href="{{pathFor 'player_list'}}"><i class="fa fa-user fa-fw fa-lg"></i>Players</a></li>
-            <li><a href="{{pathFor 'rankings'}}"><i class="fa fa-trophy fa-fw fa-lg"></i>Rankings</a></li>
-            <li><a href="{{pathFor 'about'}}"><i class="fa fa-info-circle fa-fw fa-lg"></i>About</a></li>
+            {{> navLeftItems}}
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="{{pathFor 'add_game'}}"><i class="fa fa-plus fa-fw fa-lg"></i>Add Game</a></li>
-            <li><a href="{{pathFor 'add_player'}}"><i class="fa fa-plus fa-fw fa-lg"></i>Add Player</a></li>
+            {{> navRightItems}}
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->

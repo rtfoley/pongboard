@@ -2,6 +2,27 @@ Meteor.publish('matches', function() {
   return Matches.find();
 });
 
+Matches.allow({
+  insert: function(userId, doc) {
+    return true;
+  },
+  update: function(userId, doc, fieldNames, modifier) {
+    return !! userId;
+  },
+  remove: function(userId, doc) {
+    return !! userId;
+  },
+  fetch: []
+});
+
+Matches.after.insert(function (userId, doc) {
+  updateAllRatings(doc);
+});
+
+Matches.after.update(function (userId, doc, fieldNames, modifier, options) {
+  recalc();
+});
+
 Meteor.publish('players', function() {
   var fields = {
     _id:1,
@@ -13,6 +34,17 @@ Meteor.publish('players', function() {
   }
   return Players.find({}, {fields: fields});
 });
+
+Players.allow({
+  insert: function() {
+    return true;
+  },
+  update: function(userId, doc) {
+    return !! userId;
+  },
+  fetch: []
+});
+
 
 // define some constants for Elo Ratings
 // we are using the Bonzini USA values:
@@ -33,7 +65,7 @@ var updateRating = function(rating, opponent_rating, win) {
   var We = winExpectancy(rating, opponent_rating);
   var Rn = rating + (K_RATING_COEFFICIENT * (S - We));
   
-  return Rn;
+  return Math.round(Rn);
 };
 
 var updateAllRatings = function(doc) {
@@ -45,8 +77,8 @@ var updateAllRatings = function(doc) {
     red_won = false;
   }
   
-  var user1 = Players.findOne({"_id": doc.ro});
-  var user2 = Players.findOne({"_id": doc.bo});
+  var user1 = Players.findOne({"_id": doc.ro_id});
+  var user2 = Players.findOne({"_id": doc.bo_id});
   
   // Calculate new ratings
   newRating1 = updateRating(user1.rating, user2.rating, red_won);
@@ -82,28 +114,6 @@ var updateAllRatings = function(doc) {
   });
 };
 
-var addPlayer = function(player_name) {
-  id = Players.insert({
-    date_time: Date.now(),
-    name: player_name,
-    rating: 1200,
-    wins: 0,
-    losses: 0
-  });
-
-  return id;
-};
-
-var insertMatch = function(doc) {
-  Matches.insert({
-    date_time: Date.now(),
-    ro_id: doc.ro,
-    bo_id: doc.bo,
-    rs: doc.rs,
-    bs: doc.bs
-  });
-};
-
 var recalc = function() {
   console.log('recalculating ratings');
 
@@ -123,8 +133,8 @@ var recalc = function() {
   var matches = Matches.find({}, {sort: {date_time: 1}});
   matches.forEach(function(match) {
     var doc = ({
-      ro: match.ro_id,
-      bo: match.bo_id,
+      ro_id: match.ro_id,
+      bo_id: match.bo_id,
       rs: match.rs,
       bs: match.bs
     });
@@ -133,19 +143,10 @@ var recalc = function() {
 }
 
 Meteor.methods({
-  add_match: function(doc) {
-    // check the form against the schema
-    check(doc, MatchFormSchema);
-
-    // after the form has been checked, insert the Match into the collection
-    insertMatch(doc);
-
-    // update all ratings
-    updateAllRatings(doc);
-  },
-  add_player: function(doc) {
-    check(doc, PlayerFormSchema);
-    addPlayer(doc.player_name);
+  deleteMatch: function (id) {
+    Matches.remove(id);
+    recalc();
+    return true;
   }
 });
 
@@ -153,4 +154,11 @@ Meteor.startup(function() {
   if(Players.find().count()>0 && Matches.find().count()>0) {
     recalc();
   }
+  if(Meteor.users.find().count()===0)
+    {
+      Accounts.createUser({
+        username: "admin",
+        password: "changeme"
+      });
+    }
 });

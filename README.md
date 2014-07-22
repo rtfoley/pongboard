@@ -46,7 +46,8 @@ General Improvements
 - [ ] quick-link to all of a player's games on their page
 - [x] all player names should be links
 - [ ] use the 'elo' npm package for rating calculations
-- [ ] admin system to edit/ delete games + players.
+- [x] admin system to edit/ delete games + players.
+- [ ] ability to 'retire' players (so that they can't be selected for games)
 - [ ] unit tests
 - [ ] Player comparison matrix?
 

@@ -1,13 +1,16 @@
 <template name="player_form">
-  {{#autoForm schema=playerForm id="playerform" type="method" meteormethod="add_player"}}
+  {{#autoForm collection="Players" id="playerForm" doc=player type=formType}}
     <fieldset>
       <div class="row">
         <div class="col-sm-6 col-sm-offset-3">
           <div>
-            {{> afQuickField name='player_name'}}
+            {{> afQuickField name='name'}}
           </div>
           <div style="text-align:center">
             <button type="submit" class="btn btn-primary">Submit</button>
+            {{#if player}}
+            <button type="button" class="btn btn-warning cancel">Cancel</button>
+            {{/if}}
           </div>
         </div>
       </div>
