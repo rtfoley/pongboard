@@ -1,10 +1,12 @@
 <template name="rankings">
   <div class="container-fluid">
-    <h2 align="center">Rankings</h2>
-    {{#playerTableWrapper}}
-      {{#each players}}
-        {{> player_row}}
-      {{/each}}
-    {{/playerTableWrapper}}
+    <div class="row">
+      <h2 align="center">Rankings</h2>
+      {{#playerTableWrapper}}
+        {{#each players}}
+          {{> player_row}}
+        {{/each}}
+      {{/playerTableWrapper}}
+    </div>
   </div>
 </template>
